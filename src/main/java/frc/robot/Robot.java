@@ -13,12 +13,18 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  
+  //Class Initiation
+  private final DriveTrain driveTrain = new DriveTrain();
+  private final ControlInputs controlInputs = new ControlInputs();
+
+  //Variable Initiation
+
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    //Drivetrain setup
+    driveTrain.resetEncoders();
+  }
 
   @Override
   public void robotPeriodic() {}
@@ -33,7 +39,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation);
+  }
 
   @Override
   public void disabledInit() {}
