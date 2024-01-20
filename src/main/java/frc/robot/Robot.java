@@ -40,6 +40,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    controlInputs.readControls();
+
     driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation);
   }
 

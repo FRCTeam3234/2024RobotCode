@@ -6,20 +6,25 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class DriveTrain {
     
-    private final CANSparkMax driveFrontLeft = new CANSparkMax(0, MotorType.kBrushless);
-    private final CANSparkMax driveRearLeft = new CANSparkMax(0, MotorType.kBrushless);
+    private final CANSparkMax driveFrontLeft = new CANSparkMax(4, MotorType.kBrushless);
+    private final CANSparkMax driveRearLeft = new CANSparkMax(3, MotorType.kBrushless);
     
-    private final CANSparkMax driveFrontRight = new CANSparkMax(0, MotorType.kBrushless);
-    private final CANSparkMax driveRearRight = new CANSparkMax(0, MotorType.kBrushless);
+    private final CANSparkMax driveFrontRight = new CANSparkMax(2, MotorType.kBrushless);
+    private final CANSparkMax driveRearRight = new CANSparkMax(1, MotorType.kBrushless);
 
     private final MecanumDrive robotDrive = new MecanumDrive(driveFrontLeft, driveRearLeft, driveFrontRight, driveRearRight);
 
     public DriveTrain() {
-        
+        //Left Invert
+        driveFrontLeft.setInverted(false);
+        driveRearLeft.setInverted(false);
+        //Right Invert
+        driveFrontRight.setInverted(true);
+        driveRearRight.setInverted(true);
     }
 
     public void mecanumDrive(double xSpeed, double ySpeed, double zRotation) {
-        robotDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+        robotDrive.driveCartesian(-ySpeed, xSpeed, zRotation);
     }
 
     public void resetEncoders() {
