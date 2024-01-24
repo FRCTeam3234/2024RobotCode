@@ -18,9 +18,9 @@ public class ControlInputs {
     //Reading the controls
     public final void readControls() {
         //Drivestick
-        driveStickX = driveStick.getLeftX();
-        driveStickY = driveStick.getLeftY();
-        driveStickZrotation = driveStick.getRightX();
+        driveStickX = driveStick.getLeftX() * Math.abs(driveStick.getLeftX());
+        driveStickY = driveStick.getLeftY() * Math.abs(driveStick.getLeftY());
+        driveStickZrotation = driveStick.getRightX() * Math.abs(driveStick.getRightX());
     }
 
     //For later
