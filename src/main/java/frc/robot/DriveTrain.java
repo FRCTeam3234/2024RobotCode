@@ -27,6 +27,14 @@ public class DriveTrain {
         robotDrive.driveCartesian(-ySpeed, xSpeed, zRotation);
     }
 
+    public double getFrontLeftPosition() {
+        return driveFrontLeft.getEncoder().getPosition();
+    }
+    
+    public double getFrontRightPosition() {
+        return driveFrontRight.getEncoder().getPosition();
+    }
+
     public void resetEncoders() {
         //Left
         driveFrontLeft.getEncoder().setPosition(0);
