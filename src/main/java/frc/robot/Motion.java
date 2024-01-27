@@ -16,14 +16,10 @@ public class Motion {
     private double tolerance;
 
     public Motion(double time, double dist, double tol, double moveK){
-        timeMax = Time(dist);
+        timeMax = time;
         distance = dist;
         tolerance = tol;
         moveConstant = moveK;
-    }
-
-    private double Time(double maxDistance) {
-        return (2*maxDistance)/(5500/60);
     }
     
     /*
@@ -72,6 +68,8 @@ public class Motion {
         or if the distance away from the target position is within the tolerance of error for the position
     */
     public boolean isDone (double currentPosition, double currentTime) {
+        if (currentTime > timeMax) System.out.println("Move Timeout");
+        if (Math.abs(currentPosition - distance) < tolerance) System.out.println("Move distance End");
         return (currentTime > timeMax) || (Math.abs(currentPosition - distance) < tolerance);
     }
 }

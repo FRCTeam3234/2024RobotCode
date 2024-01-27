@@ -10,7 +10,7 @@ public class AutoAction_DoNothing extends AutoAction {
     
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensors) {
-        driveTrain.mecanumDrive(0, 0, 0);
+        driveTrain.mecanumDrive(0, 0, 0, driveTrain.defualtRotation2d);
         return false;
     }
 

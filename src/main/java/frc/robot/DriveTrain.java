@@ -3,6 +3,7 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class DriveTrain {
     
@@ -14,6 +15,8 @@ public class DriveTrain {
 
     private final MecanumDrive robotDrive = new MecanumDrive(driveFrontLeft, driveRearLeft, driveFrontRight, driveRearRight);
 
+    public final Rotation2d defualtRotation2d = Rotation2d.fromDegrees(0.0);
+
     public DriveTrain() {
         //Left Invert
         driveFrontLeft.setInverted(false);
@@ -21,10 +24,12 @@ public class DriveTrain {
         //Right Invert
         driveFrontRight.setInverted(true);
         driveRearRight.setInverted(true);
+        //Overall
+        robotDrive.setDeadband(0.0);
     }
 
-    public void mecanumDrive(double xSpeed, double ySpeed, double zRotation) {
-        robotDrive.driveCartesian(-ySpeed, xSpeed, zRotation);
+    public void mecanumDrive(double xSpeed, double ySpeed, double zRotation, Rotation2d gyroRotation) {
+        robotDrive.driveCartesian(-ySpeed, xSpeed, zRotation, gyroRotation);
     }
 
     public double getFrontLeftPosition() {

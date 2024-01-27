@@ -46,7 +46,7 @@ public class AutoMove {
         SmartDashboard.putNumber("Auto Motor Power", power);
 
         //Control drivetrain
-        driveTrain.mecanumDrive(power, 0, 0);
+        driveTrain.mecanumDrive(0, -power, 0, driveTrain.defualtRotation2d);
 
         //Return true if done
         done = motion.isDone(currentPosition, currentTime);
