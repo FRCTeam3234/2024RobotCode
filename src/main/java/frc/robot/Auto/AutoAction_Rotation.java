@@ -7,21 +7,21 @@ import frc.robot.SensorInputs;
 
 public class AutoAction_Rotation extends AutoAction {
     
-    //The target degree to end up at
-    private double targetDegrees;
-
     //The error in degrees
-    private double targetError = 2.0;
+    private final double targetError = 2.0;
 
     //The desired overall max power to make a turn
-    private double maxPower = 0.3;
-
-    //The scaler value for power per degree
-    private double spinK = 0.05;
+    private final double maxPower = 0.3;
 
     //The minumium power output to make a turn
         //Value is gotten through drive station from controller input in tele
-    private double emulatedControllerMin = 0.3;
+    private final double emulatedControllerMin = 0.3;
+
+    //The direction of the movement (left/right)
+    public static enum direction {
+        LEFT,
+        RIGHT
+    };
     
     /*  
         P = degrees
@@ -29,26 +29,42 @@ public class AutoAction_Rotation extends AutoAction {
         dP/dt = angular velocity
         dP/dt = k(T - P)
     */
+
+    //The target degree to end up at
+    private double targetDegrees;
     
     //Makes farthest degree always one
     private double proportionalScaler;
 
-    private double minPower = emulatedControllerMin * emulatedControllerMin * 0.5;
+    //The direction the turn will be made
+    private direction setDirection = null;
 
-    public AutoAction_Rotation(double ftargetDegrees) {
+    //The degree to start the turn
+    private double startingDegree;
+
+    private final double minPower = emulatedControllerMin * emulatedControllerMin * 0.5;
+
+    public AutoAction_Rotation(double ftargetDegrees, direction fdirection) {
         targetDegrees = ftargetDegrees;
+        setDirection = fdirection;
     }
     
     @Override
     public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        proportionalScaler = maxPower / Math.abs(targetDegrees - sensor.currentYawDegrees);
+        startingDegree = sensor.currentYawDegrees;
+        
+        if (setDirection == null) setDirection = getFastedDirection(startingDegree);
+        System.out.println("Auto Rotation Direction: " + setDirection);
+
+        //Scaler
+        proportionalScaler = maxPower / travelDistance(startingDegree);
         System.out.println("Auto Rotation Scaler: " + proportionalScaler);
     }
 
     @Override
     public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         //Values
-        double degreesLeft = targetDegrees - sensor.currentYawDegrees;
+        double degreesLeft = travelDistance(sensor.currentYawDegrees);
         SmartDashboard.putNumber("Auto Degrees Left", degreesLeft);
         
         //Rotation
@@ -67,4 +83,15 @@ public class AutoAction_Rotation extends AutoAction {
 
     @Override
     public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
+
+    private final direction getFastedDirection(double currentDegree) {
+        double distanceRight = (360 + (targetDegrees - currentDegree)) % 360;
+        if (distanceRight > 180) return direction.LEFT;
+        return direction.RIGHT;
+    }
+
+    private final double travelDistance(double currentDegree) {
+        if ( setDirection == direction.RIGHT ) return (360 + (targetDegrees - currentDegree)) % 360;
+        return (360 - (targetDegrees - currentDegree)) % 360;
+    }
 }

@@ -19,12 +19,16 @@ public class SensorInputs {
     //Reading the sensors
     public void readSensors() {
         //NavX
-        currentPitchDegrees = navxAhrs.getPitch();
-        currentYawDegrees = navxAhrs.getYaw();
-        currentRollDegrees = navxAhrs.getRoll();
+        currentPitchDegrees = convertTo360(navxAhrs.getPitch());
+        currentYawDegrees = convertTo360(navxAhrs.getYaw());
+        currentRollDegrees = convertTo360(navxAhrs.getRoll());
         drivetrainRotation = Rotation2d.fromDegrees(currentYawDegrees);
         SmartDashboard.putNumber("NavX Pitch", currentPitchDegrees);
         SmartDashboard.putNumber("NavX Yaw", currentYawDegrees);
         SmartDashboard.putNumber("NavX Roll", currentRollDegrees);
+    }
+
+    public final float convertTo360(float input) {
+        return (input + 360) % 360;
     }
 }

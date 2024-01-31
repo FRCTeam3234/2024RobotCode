@@ -69,8 +69,8 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new AutoAction_DoNothing());
         break;
       case kTurnTest:
-        autonomousSequence.add(new AutoAction_Rotation(45.0));
-        autonomousSequence.add(new AutoAction_Rotation(-45));
+        autonomousSequence.add(new AutoAction_Rotation(45.0, null));
+        autonomousSequence.add(new AutoAction_Rotation(-45.0, null));
         autonomousSequence.add(new AutoAction_DoNothing());
         break;
       default:
