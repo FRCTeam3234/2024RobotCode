@@ -14,7 +14,7 @@ public class IntakeRotationControl {
     public final void runRotation(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         //Variable Defintions
         int encoderPosition = sensorInputs.intakeEncoder.get(); //Assume this value is + towards out
-        double target = encoderPosition;
+        int target = encoderPosition;
         SmartDashboard.putNumber("Intake Rotation Count", encoderPosition);
 
         //EStop Controls
@@ -26,11 +26,16 @@ public class IntakeRotationControl {
 
         //Intake Target Controls
         if (controlInputs.intakeOut) {
-            target = 972.0;
+            target = 972;
         } else if (sensorInputs.intakeLimitHome == false) {
-            target = 0.0;
+            target = 0;
         }
         //Otherwise target will equal the current encoder position
+
+        //Prevent target from being less then zero (for saftey)
+        if (target < 0) {
+            target = 0;
+        }
         
         double intakePower = 0.0;
         if (homed) {
@@ -44,8 +49,8 @@ public class IntakeRotationControl {
         SmartDashboard.putNumber("Intake Power", intakePower);
     }
 
-    private final double rotationMath(double target, int encoderPosition) {
-        double intakeDistRemainTravel = (target - encoderPosition);
+    private final double rotationMath(int target, int encoderPosition) {
+        int intakeDistRemainTravel = (target - encoderPosition);
         
         double intakeMath = 0.0;
         if (target != encoderPosition) {
