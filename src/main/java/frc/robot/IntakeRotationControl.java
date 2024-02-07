@@ -33,7 +33,9 @@ public class IntakeRotationControl {
         //Otherwise target will equal the current encoder position
 
         //Prevent target from being less then zero (for saftey)
-        if (target < 0) target = 0;
+        if (target < 0) {
+            target = 0;
+        }
         
         double intakePower = 0.0;
         if (homed) {
