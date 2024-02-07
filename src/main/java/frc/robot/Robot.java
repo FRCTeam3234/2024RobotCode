@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   private final SensorInputs sensorInputs = new SensorInputs();
   private Components components = new Components();
   private final ComponentsControl componentsControl = new ComponentsControl();
+  private final IntakeRotationControl intakeRotationControl = new IntakeRotationControl();
 
   //Variable Initiation
 
@@ -104,6 +105,7 @@ public class Robot extends TimedRobot {
     controlInputs.readControls(componentsControl);
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
+    intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
 
     driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }

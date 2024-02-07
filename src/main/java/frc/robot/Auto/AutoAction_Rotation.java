@@ -45,12 +45,12 @@ public class AutoAction_Rotation extends AutoAction {
 
     private final double minPower = emulatedControllerMin * emulatedControllerMin * 0.5;
 
-    public AutoAction_Rotation(double ftargetDegrees, direction fdirection) {
-        targetDegrees = ftargetDegrees;
-        setDirection = fdirection;
+    public AutoAction_Rotation(double targetDegrees, direction direction) {
+        this.targetDegrees = targetDegrees;
+        this.setDirection = direction;
     }
-    public AutoAction_Rotation(double ftargetDegrees) {
-        this(ftargetDegrees, direction.AUTO);
+    public AutoAction_Rotation(double targetDegrees) {
+        this(targetDegrees, direction.AUTO);
     }
 
     @Override
