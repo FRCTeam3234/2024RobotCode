@@ -1,4 +1,4 @@
-package frc.robot.Auto;
+package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.DriveTrain;
@@ -9,15 +9,11 @@ public class AutoMove {
     //Class Defintions
     private Motion motion;
 
-
     //Variable Defintions
+    static final double gearRatio = 9.13;
+    static final double wheelDiameter = 6;
     private double rotationsToTravel;
-    private double gearRatio = 9.13;
-    private double wheelDiameter = 6;
     private double timeStarted;
-    private double currentTime;
-    private double power;
-    private boolean done;
 
     //To convert inches to encoder count do: inches * gearRatio / (diameter * pi)
     public final void MoveInit(double maxTime, double inchesToTravel, double toleranceInEncoderCount, double scaler) {
@@ -37,8 +33,8 @@ public class AutoMove {
         
         //Variable Defintions
         double currentPosition = driveTrain.getFrontLeftPosition();
-        currentTime = ((Timer.getFPGATimestamp()) - timeStarted);
-        power = motion.getPower(currentPosition, currentTime);
+        double currentTime = ((Timer.getFPGATimestamp()) - timeStarted);
+        double power = motion.getPower(currentPosition, currentTime);
         
         //Smart Dashboard Output
         SmartDashboard.putNumber("Auto Left Current Position", driveTrain.getFrontLeftPosition());
@@ -46,10 +42,9 @@ public class AutoMove {
         SmartDashboard.putNumber("Auto Motor Power", power);
 
         //Control drivetrain
-        driveTrain.mecanumDrive(0, -power, 0, driveTrain.defualtRotation2d);
+        driveTrain.mecanumDrive(0, -power, 0, driveTrain.defaultRotation2d);
 
         //Return true if done
-        done = motion.isDone(currentPosition, currentTime);
-        return done;
+        return motion.isDone(currentPosition, currentTime);
     }
 }

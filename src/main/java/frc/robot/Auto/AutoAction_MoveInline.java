@@ -1,4 +1,4 @@
-package frc.robot.Auto;
+package frc.robot.auto;
 
 import frc.robot.Components;
 import frc.robot.DriveTrain;
@@ -12,10 +12,6 @@ public class AutoAction_MoveInline extends AutoAction {
     /*
         encoderCount = inches * gearRatio / (diameter * pi);
     */
-
-    //Drivetain setup
-    private double gearRatio = 9.13;
-    private double wheelDiameter = 6;
 
     //Time in seconds to execute the move
     private double maxTime;
@@ -33,19 +29,24 @@ public class AutoAction_MoveInline extends AutoAction {
         maxTime = fmaxTimeSeconds;
         distance = fdistanceInches;
 
-        tolerance = ftoleranceInches * gearRatio / (Math.PI * wheelDiameter);
+        tolerance = ftoleranceInches * AutoMove.gearRatio / (Math.PI * AutoMove.wheelDiameter);
     }
 
     @Override
-    public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+    public void init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         auto.MoveInit(maxTime, distance, tolerance, moveK);
     }
 
     @Override
-    public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+    public boolean execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         return auto.MoveExecute(driveTrain);
     }
 
     @Override
-    public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
+    public void finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
+
+    @Override
+    public String toString() {
+        return "Auto: Move Inline";
+    }
 }

@@ -15,7 +15,7 @@ public class DriveTrain {
 
     private final MecanumDrive robotDrive = new MecanumDrive(driveFrontLeft, driveRearLeft, driveFrontRight, driveRearRight);
 
-    public final Rotation2d defualtRotation2d = Rotation2d.fromDegrees(0.0);
+    public final Rotation2d defaultRotation2d = Rotation2d.fromDegrees(0.0);
 
     public DriveTrain() {
         //Left Invert

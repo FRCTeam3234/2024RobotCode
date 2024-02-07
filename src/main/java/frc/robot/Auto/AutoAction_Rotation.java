@@ -1,4 +1,4 @@
-package frc.robot.Auto;
+package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Components;
@@ -20,7 +20,8 @@ public class AutoAction_Rotation extends AutoAction {
     //The direction of the movement (left/right)
     public static enum direction {
         LEFT,
-        RIGHT
+        RIGHT,
+        AUTO
     };
     
     /*  
@@ -48,12 +49,17 @@ public class AutoAction_Rotation extends AutoAction {
         targetDegrees = ftargetDegrees;
         setDirection = fdirection;
     }
-    
+    public AutoAction_Rotation(double ftargetDegrees) {
+        this(ftargetDegrees, direction.AUTO);
+    }
+
     @Override
-    public void Init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+    public void init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         startingDegree = sensor.currentYawDegrees;
         
-        if (setDirection == null) setDirection = getFastedDirection(startingDegree);
+        if (setDirection != direction.LEFT && setDirection != direction.RIGHT) {
+            setDirection = getFastestDirection(startingDegree);
+        }
         System.out.println("Auto Rotation Direction: " + setDirection);
 
         //Scaler
@@ -62,7 +68,7 @@ public class AutoAction_Rotation extends AutoAction {
     }
 
     @Override
-    public boolean Execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+    public boolean execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
         //Values
         double degreesLeft = travelDistance(sensor.currentYawDegrees);
         SmartDashboard.putNumber("Auto Degrees Left", degreesLeft);
@@ -73,18 +79,22 @@ public class AutoAction_Rotation extends AutoAction {
         if (power > 0 && Math.abs(power) < minPower) power = minPower;
         if (power < 0 && Math.abs(power) < minPower) power = -minPower;
 
-        driveTrain.mecanumDrive(0, 0, power, driveTrain.defualtRotation2d);
+        driveTrain.mecanumDrive(0, 0, power, driveTrain.defaultRotation2d);
         SmartDashboard.putNumber("Auto Motor Power", power);
         
         //Returning
-        if (Math.abs(degreesLeft) <= targetError) return true;
-        return false;
+        return Math.abs(degreesLeft) <= targetError;
     }
 
     @Override
-    public void Finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
+    public void finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
 
-    private final direction getFastedDirection(double currentDegree) {
+    @Override
+    public String toString() {
+        return "Auto: Rotation";
+    }
+
+    private final direction getFastestDirection(double currentDegree) {
         double distanceRight = (360 + (targetDegrees - currentDegree)) % 360;
         if (distanceRight > 180) return direction.LEFT;
         return direction.RIGHT;

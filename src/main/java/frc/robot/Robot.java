@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-//Auto Imports
-import frc.robot.Auto.AutoAction;
-import frc.robot.Auto.AutoAction_DoNothing;
-import frc.robot.Auto.AutoAction_MoveInline;
-import frc.robot.Auto.AutoAction_Rotation;
+import frc.robot.auto.AutoAction;
+import frc.robot.auto.DoNothingAutoAction;
+import frc.robot.auto.AutoAction_MoveInline;
+import frc.robot.auto.AutoAction_Rotation;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,14 +29,13 @@ public class Robot extends TimedRobot {
   private Components components = new Components();
   private final ComponentsControl componentsControl = new ComponentsControl();
 
-
   //Variable Initiation
 
   //Auto Variable Initiation
   private String autoSelected;
-  private final String kAutoModeNull = "Do Nothing";
-  private final String kLeave = "Leave";
-  private final String kTurnTest = "Turn Test";
+  private final String autoModeNull = "Do Nothing";
+  private final String autoLeave = "Leave";
+  private final String autoTurnTest = "Turn Test";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -48,10 +45,10 @@ public class Robot extends TimedRobot {
     driveTrain.resetEncoders();
 
     //Auto Chooser
-    auto_chooser.addOption(kAutoModeNull, kAutoModeNull);
-    auto_chooser.addOption(kLeave, kLeave);
-    auto_chooser.addOption(kTurnTest, kTurnTest);
-    auto_chooser.setDefaultOption(kAutoModeNull, kAutoModeNull);
+    auto_chooser.addOption(autoModeNull, autoModeNull);
+    auto_chooser.addOption(autoLeave, autoLeave);
+    auto_chooser.addOption(autoTurnTest, autoTurnTest);
+    auto_chooser.setDefaultOption(autoModeNull, autoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
   }
@@ -64,38 +61,38 @@ public class Robot extends TimedRobot {
     autonomousSequence = new ArrayList<AutoAction>();
     autoSelected = auto_chooser.getSelected();
     switch (autoSelected) {
-      case kLeave:
+      case autoLeave:
         autonomousSequence.add(new AutoAction_MoveInline(5.0, 80.0, 2.0));
-        autonomousSequence.add(new AutoAction_DoNothing());
+        autonomousSequence.add(new DoNothingAutoAction());
         break;
-      case kTurnTest:
-        autonomousSequence.add(new AutoAction_Rotation(45.0, null));
-        autonomousSequence.add(new AutoAction_Rotation(-45.0, null));
-        autonomousSequence.add(new AutoAction_DoNothing());
+      case autoTurnTest:
+        autonomousSequence.add(new AutoAction_Rotation(45.0));
+        autonomousSequence.add(new AutoAction_Rotation(-45.0));
+        autonomousSequence.add(new DoNothingAutoAction());
         break;
       default:
-        autonomousSequence.add(new AutoAction_DoNothing());
+        autonomousSequence.add(new DoNothingAutoAction());
         break;
     }
-    autonomousSequence.get(0).Init(driveTrain, components, sensorInputs);
+    autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
   }
 
   @Override
   public void autonomousPeriodic() {
     if (autonomousSequence.size() > 0) {
       SmartDashboard.putString("Current Auto Action",
-         autonomousSequence.get(0).getClass().toString());
+         autonomousSequence.get(0).toString());
       sensorInputs.readSensors();
-      if (autonomousSequence.get(0).Execute(driveTrain, components, sensorInputs)) {
-        autonomousSequence.get(0).Finalize(driveTrain, components, sensorInputs);
+      if (autonomousSequence.get(0).execute(driveTrain, components, sensorInputs)) {
+        autonomousSequence.get(0).finalize(driveTrain, components, sensorInputs);
         autonomousSequence.remove(0);
         if (autonomousSequence.size() > 0) {
-          autonomousSequence.get(0).Init(driveTrain, components, sensorInputs);
+          autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
         }
       }
     }
     else {
-      driveTrain.mecanumDrive(0, 0, 0, driveTrain.defualtRotation2d);
+      driveTrain.mecanumDrive(0, 0, 0, driveTrain.defaultRotation2d);
     }
   }
 
