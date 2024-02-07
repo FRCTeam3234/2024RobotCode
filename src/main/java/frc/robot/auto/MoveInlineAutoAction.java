@@ -6,7 +6,7 @@ import frc.robot.SensorInputs;
 
 //Recommended tolerance in IN is 2.0
 
-public class AutoAction_MoveInline extends AutoAction {
+public class MoveInlineAutoAction extends AutoAction {
     private AutoMove auto = new AutoMove();
 
     /*
@@ -25,11 +25,11 @@ public class AutoAction_MoveInline extends AutoAction {
     //Scalar constant applied to the power output
     private double moveK = 0.125;
 
-    public AutoAction_MoveInline(double fmaxTimeSeconds, double fdistanceInches, double ftoleranceInches) {
-        maxTime = fmaxTimeSeconds;
-        distance = fdistanceInches;
+    public MoveInlineAutoAction(double maxTimeSeconds, double distanceInches, double toleranceInches) {
+        maxTime = maxTimeSeconds;
+        distance = distanceInches;
 
-        tolerance = ftoleranceInches * AutoMove.gearRatio / (Math.PI * AutoMove.wheelDiameter);
+        tolerance = toleranceInches * AutoMove.gearRatio / (Math.PI * AutoMove.wheelDiameter);
     }
 
     @Override

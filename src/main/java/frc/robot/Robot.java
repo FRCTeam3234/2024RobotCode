@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.AutoAction;
 import frc.robot.auto.DoNothingAutoAction;
-import frc.robot.auto.AutoAction_MoveInline;
-import frc.robot.auto.AutoAction_Rotation;
+import frc.robot.auto.MoveInlineAutoAction;
+import frc.robot.auto.RotationAutoAction;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   private final SensorInputs sensorInputs = new SensorInputs();
   private Components components = new Components();
   private final ComponentsControl componentsControl = new ComponentsControl();
+  private final IntakeRotationControl intakeRotationControl = new IntakeRotationControl();
 
   //Variable Initiation
 
@@ -62,12 +63,12 @@ public class Robot extends TimedRobot {
     autoSelected = auto_chooser.getSelected();
     switch (autoSelected) {
       case autoLeave:
-        autonomousSequence.add(new AutoAction_MoveInline(5.0, 80.0, 2.0));
+        autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
         autonomousSequence.add(new DoNothingAutoAction());
         break;
       case autoTurnTest:
-        autonomousSequence.add(new AutoAction_Rotation(45.0));
-        autonomousSequence.add(new AutoAction_Rotation(-45.0));
+        autonomousSequence.add(new RotationAutoAction(45.0));
+        autonomousSequence.add(new RotationAutoAction(-45.0));
         autonomousSequence.add(new DoNothingAutoAction());
         break;
       default:
@@ -104,6 +105,7 @@ public class Robot extends TimedRobot {
     controlInputs.readControls(componentsControl);
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
+    intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
 
     driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }

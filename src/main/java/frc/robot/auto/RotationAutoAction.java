@@ -5,7 +5,7 @@ import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
 
-public class AutoAction_Rotation extends AutoAction {
+public class RotationAutoAction extends AutoAction {
     
     //The error in degrees
     private final double targetError = 2.0;
@@ -45,12 +45,12 @@ public class AutoAction_Rotation extends AutoAction {
 
     private final double minPower = emulatedControllerMin * emulatedControllerMin * 0.5;
 
-    public AutoAction_Rotation(double ftargetDegrees, direction fdirection) {
-        targetDegrees = ftargetDegrees;
-        setDirection = fdirection;
+    public RotationAutoAction(double targetDegrees, direction direction) {
+        this.targetDegrees = targetDegrees;
+        this.setDirection = direction;
     }
-    public AutoAction_Rotation(double ftargetDegrees) {
-        this(ftargetDegrees, direction.AUTO);
+    public RotationAutoAction(double targetDegrees) {
+        this(targetDegrees, direction.AUTO);
     }
 
     @Override
