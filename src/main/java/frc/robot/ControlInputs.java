@@ -7,6 +7,10 @@ public class ControlInputs {
     //Joysticks IDs
     private final int driveStickDeviceId = 0;
 
+    //Max Input
+    private final double driveStickMaxMovement = 0.8;
+    private final double driveStickMaxRotation = 0.5;
+
     //Joystick Definitions
     private final XboxController driveStick = new XboxController(driveStickDeviceId);
 
@@ -16,11 +20,11 @@ public class ControlInputs {
     public double driveStickZrotation = 0.0;
 
     //Reading the controls
-    public final void readControls() {
+    public final void readControls(ComponentsControl componentsControl) {
         //Drivestick
-        driveStickX = driveStick.getLeftX() * Math.abs(driveStick.getLeftX());
-        driveStickY = driveStick.getLeftY() * Math.abs(driveStick.getLeftY());
-        driveStickZrotation = driveStick.getRightX() * Math.abs(driveStick.getRightX());
+        driveStickX = ( driveStick.getLeftX() * Math.abs(driveStick.getLeftX()) ) * driveStickMaxMovement;
+        driveStickY = ( driveStick.getLeftY() * Math.abs(driveStick.getLeftY()) ) * driveStickMaxMovement;
+        driveStickZrotation = ( driveStick.getRightX() * Math.abs(driveStick.getRightX()) ) * driveStickMaxRotation;
     }
 
     //For later
