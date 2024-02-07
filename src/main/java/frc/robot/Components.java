@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.wpilibj.Encoder;
 
 public class Components {
     //Components Definitions
@@ -20,7 +19,6 @@ public class Components {
     public final CANSparkMax rightLowerShooter = new CANSparkMax(11, MotorType.kBrushless);
     public final CANSparkMax leftUpperShooter = new CANSparkMax(7, MotorType.kBrushed);
     public final CANSparkMax rightUpperShooter = new CANSparkMax(8, MotorType.kBrushed);
-    public final Encoder intakeEncoder = new Encoder(8, 9);
 
     public Components() {
         rightUpperShooter.follow(leftUpperShooter,true);

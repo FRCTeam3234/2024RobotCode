@@ -4,50 +4,60 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeRotationControl {
     //Variable Defintions
-    private boolean intakeEStopped = false;
-    private final double intakeRotationMaxSpeed = 1.0; //Must be a + value
-    private final double intakeRotationMinSpeed = 0.4; //Must be a + value
-    private final double intakeMotionScalerConstant = 0.06;
-    private boolean intakeHomed = false;
-    double intakeTarget;
-    int intakeEncoderPosition;
+    private boolean emergencyStopped = false;
+    private final double rotationMaxSpeed = 1.0; //Must be a + value
+    private final double rotationMinSpeed = 0.4; //Must be a + value
+    private final double motionScalerConstant = 0.06;
+    private boolean homed = false;
+    double target;
+    int encoderPosition;
 
     //Run the components
     public final void runRotation(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         //Variable Defintions
-        intakeEncoderPosition = components.intakeEncoder.get(); //Assume this value is + towards out
-        intakeTarget = intakeEncoderPosition;
-        SmartDashboard.putNumber("Intake Rotation Count", intakeEncoderPosition);
+        encoderPosition = sensorInputs.intakeEncoder.get(); //Assume this value is + towards out
+        target = encoderPosition;
+        SmartDashboard.putNumber("Intake Rotation Count", encoderPosition);
 
         //EStop Controls
-        if (controlInputs.intakeEStop) intakeEStopped = true;
-        SmartDashboard.putBoolean("Intake E Stopped", intakeEStopped);
+        if (controlInputs.intakeEStop) emergencyStopped = true;
+        SmartDashboard.putBoolean("Intake E Stopped", emergencyStopped);
+        if (emergencyStopped) {
+            return;
+        }
 
         //Intake Target Controls
         if (controlInputs.intakeOut) {
-            intakeTarget = 972.0;
+            target = 972.0;
         } else {
-            if (sensorInputs.intakeLimitHome == false) intakeTarget = 0.0;
+            if (sensorInputs.intakeLimitHome == false) target = 0.0;
         }
         
-        double intakePower = rotationMath(components, sensorInputs);
-        SmartDashboard.putBoolean("Intake Unlocked", intakeHomed);
+        double intakePower = 0.0;
+        if (homed) {
+            intakePower = rotationMath(components, sensorInputs);
+        } else {
+            intakePower = rotationHome(components, sensorInputs);
+        }
+        
+        components.intakeRotation.set(intakePower);
+        SmartDashboard.putBoolean("Intake Unlocked", homed);
         SmartDashboard.putNumber("Intake Power", intakePower);
     }
 
     private final double rotationMath(Components components, SensorInputs sensorInputs) {
-        if (!intakeEStopped && intakeHomed) {
-            double intakeDistRemainTravel = (intakeTarget - intakeEncoderPosition);
+        if (!emergencyStopped && homed) {
+            double intakeDistRemainTravel = (target - encoderPosition);
             
             double intakeMath = 0.0;
-            if (intakeTarget != intakeEncoderPosition) {
+            if (target != encoderPosition) {
                 intakeMath = Math.sqrt(Math.abs(intakeDistRemainTravel));
-                intakeMath *= intakeMotionScalerConstant;
+                intakeMath *= motionScalerConstant;
                 if (intakeDistRemainTravel < 0) {
-                    intakeMath = Math.min(-intakeRotationMinSpeed, -intakeMath);
+                    intakeMath = Math.min(-rotationMinSpeed, -intakeMath);
                     SmartDashboard.putString("Intake Movement", "Moving In");
                 } else if (intakeDistRemainTravel > 0) {
-                    intakeMath = Math.max(intakeRotationMinSpeed, intakeMath);
+                    intakeMath = Math.max(rotationMinSpeed, intakeMath);
                     SmartDashboard.putString("Intake Movement", "Moving Out");
                 }
             } else {
@@ -57,18 +67,21 @@ public class IntakeRotationControl {
             SmartDashboard.putNumber("Intake Math", intakeMath);
             SmartDashboard.putNumber("Intake Dist Travel", intakeDistRemainTravel);
 
-            double intakeMathClamped = Math.max(-intakeRotationMaxSpeed, Math.min(intakeRotationMaxSpeed, intakeMath));
+            double intakeMathClamped = Math.max(-rotationMaxSpeed, Math.min(rotationMaxSpeed, intakeMath));
             SmartDashboard.putNumber("Intake Math Clamped", intakeMathClamped);
             return intakeMathClamped;
-        } else if (!intakeEStopped && !intakeHomed) {
-            if (sensorInputs.intakeLimitHome == false) {
-                SmartDashboard.putString("Intake Movement", "In (Homing)");
-                return -intakeRotationMinSpeed;
-            } else {
-                intakeHomed = true;
-                components.intakeEncoder.reset();
-                SmartDashboard.putString("Intake Movement", "Homed");
-            }
+        }
+        return 0.0;
+    }
+
+    private final double rotationHome(Components components, SensorInputs sensorInputs) {
+        if (sensorInputs.intakeLimitHome == false) {
+            SmartDashboard.putString("Intake Movement", "In (Homing)");
+            return -rotationMinSpeed;
+        } else {
+            homed = true;
+            sensorInputs.intakeEncoder.reset();
+            SmartDashboard.putString("Intake Movement", "Homed");
         }
         return 0.0;
     }
