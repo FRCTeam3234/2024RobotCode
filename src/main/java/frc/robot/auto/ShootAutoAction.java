@@ -4,12 +4,12 @@ import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
 
-public class AutoAction_Shoot extends AutoAction {
+public class ShootAutoAction extends AutoAction {
     private double timeToShoot;
     private double power;
     private long startTime;
     
-    public AutoAction_Shoot(double shootTime, double power) {
+    public ShootAutoAction(double shootTime, double power) {
         timeToShoot = shootTime * 1000;
         this.power = power;
     }
