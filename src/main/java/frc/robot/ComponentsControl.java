@@ -56,6 +56,8 @@ public class ComponentsControl {
 
         SmartDashboard.putNumber("Shooter Speed", shooterSpeed);
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
+        SmartDashboard.putNumber("Left Climb Speed", climbLeftSpeed);
+        SmartDashboard.putNumber("Right Climb Speed", climbRightSpeed);
 
         components.leftLowerShooter.set(shooterSpeed);
         components.leftUpperShooter.set(shooterSpeed);
