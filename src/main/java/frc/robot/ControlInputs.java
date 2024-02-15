@@ -37,6 +37,8 @@ public class ControlInputs {
     public boolean intakeIn = false;
     public boolean shootHigh = false;
     public boolean shootLow = false;
+    public boolean climbUp = false;
+    public boolean climbDown = false;
 
     //Reading the controls
     public final void readControls(ComponentsControl componentsControl) {
@@ -52,8 +54,11 @@ public class ControlInputs {
         //Components Board Left
         intakeOut  = componentsBoardLeft.getRawButton(intakeOutId);
         intakeEStop = (componentsBoardLeft.getX() <= -0.5);
+        //Drive Controller Climb
+        climbDown = driveStick.getAButton();
+        climbUp = driveStick.getYButton();
     }
-    
+
     //For later
     public final void setRumble(double value) {
         driveStick.setRumble(RumbleType.kBothRumble, value);
