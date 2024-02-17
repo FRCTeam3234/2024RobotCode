@@ -13,6 +13,7 @@ import frc.robot.auto.AutoAction;
 import frc.robot.auto.DoNothingAutoAction;
 import frc.robot.auto.MoveInlineAutoAction;
 import frc.robot.auto.RotationAutoAction;
+import frc.robot.auto.ShootAutoAction;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
   private final String autoModeNull = "Do Nothing";
   private final String autoLeave = "Leave";
   private final String autoTurnTest = "Turn Test";
+  private final String autoSpeaker = "Speaker n Leave";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -49,6 +51,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(autoModeNull, autoModeNull);
     auto_chooser.addOption(autoLeave, autoLeave);
     auto_chooser.addOption(autoTurnTest, autoTurnTest);
+    auto_chooser.addOption(autoSpeaker, autoSpeaker);
     auto_chooser.setDefaultOption(autoModeNull, autoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
@@ -71,6 +74,10 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new RotationAutoAction(-45.0));
         autonomousSequence.add(new DoNothingAutoAction());
         break;
+      case autoSpeaker:
+        autonomousSequence.add(new ShootAutoAction(5.0, 1.0));
+        autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
+        autonomousSequence.add(new DoNothingAutoAction());
       default:
         autonomousSequence.add(new DoNothingAutoAction());
         break;
