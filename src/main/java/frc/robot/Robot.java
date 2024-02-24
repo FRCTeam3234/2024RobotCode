@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.auto.AutoAction;
 import frc.robot.auto.DoNothingAutoAction;
 import frc.robot.auto.MoveInlineAutoAction;
@@ -47,6 +48,9 @@ public class Robot extends TimedRobot {
     //Drivetrain setup
     driveTrain.resetEncoders();
 
+    //Camera Setup
+    CameraServer.startAutomaticCapture("Main Camera", 0);
+
     //Auto Chooser
     auto_chooser.addOption(autoModeNull, autoModeNull);
     auto_chooser.addOption(autoLeave, autoLeave);
@@ -62,6 +66,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    driveTrain.resetEncoders();
     autonomousSequence = new ArrayList<AutoAction>();
     autoSelected = auto_chooser.getSelected();
     switch (autoSelected) {
