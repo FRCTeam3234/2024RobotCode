@@ -21,15 +21,15 @@ public class ShootAutoAction extends AutoAction {
 
     @Override
     public boolean execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        components.leftLowerShooter.set(power);
-        components.leftUpperShooter.set(power);
+        components.leftShooter.set(power);
+        components.rightShooter.set( Math.max(0, power-0.05) );
         return (System.currentTimeMillis() - startTime) >= timeToShoot;
     }
 
     @Override
     public void finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        components.leftLowerShooter.set(0.0);
-        components.leftUpperShooter.set(0.0);
+        components.leftShooter.set(0.0);
+        components.rightShooter.set(0.0);
     }
 
     @Override

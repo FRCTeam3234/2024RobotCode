@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Components {
@@ -13,7 +14,7 @@ public class Components {
 
         //Both
     //public final CANSparkMax intakeSmallBar = new CANSparkMax(6, MotorType.kBrushless);
-    public final CANSparkMax intakeBigBar = new CANSparkMax(5, MotorType.kBrushless);
+    public final CANSparkFlex intakeBigBar = new CANSparkFlex(5, MotorType.kBrushless);
     public final CANSparkMax intakeRotation = new CANSparkMax(9, MotorType.kBrushless);
     public final CANSparkMax leftBelt = new CANSparkMax(10, MotorType.kBrushless);
     public final CANSparkMax rightBelt = new CANSparkMax(11, MotorType.kBrushless);
@@ -23,7 +24,7 @@ public class Components {
     public Components() {
         leftShooter.setInverted(false);
         rightShooter.setInverted(true);
-        rightBelt.setInverted(true)
+        rightBelt.setInverted(true);
         leftBelt.follow(rightBelt,true);
         //intakeSmallBar.follow(intakeBigBar,false);
     }
