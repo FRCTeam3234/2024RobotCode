@@ -12,17 +12,19 @@ public class Components {
     public final CANSparkMax climbRight = new CANSparkMax(13, MotorType.kBrushless);
 
         //Both
-    public final CANSparkMax intakeSmallBar = new CANSparkMax(5, MotorType.kBrushless);
-    public final CANSparkMax intakeBigBar = new CANSparkMax(6, MotorType.kBrushless);
+    //public final CANSparkMax intakeSmallBar = new CANSparkMax(6, MotorType.kBrushless);
+    public final CANSparkMax intakeBigBar = new CANSparkMax(5, MotorType.kBrushless);
     public final CANSparkMax intakeRotation = new CANSparkMax(9, MotorType.kBrushless);
-    public final CANSparkMax leftLowerShooter = new CANSparkMax(10, MotorType.kBrushless);
-    public final CANSparkMax rightLowerShooter = new CANSparkMax(11, MotorType.kBrushless);
-    public final CANSparkMax leftUpperShooter = new CANSparkMax(7, MotorType.kBrushed);
-    public final CANSparkMax rightUpperShooter = new CANSparkMax(8, MotorType.kBrushed);
+    public final CANSparkMax leftBelt = new CANSparkMax(10, MotorType.kBrushless);
+    public final CANSparkMax rightBelt = new CANSparkMax(11, MotorType.kBrushless);
+    public final CANSparkMax leftShooter = new CANSparkMax(7, MotorType.kBrushed);
+    public final CANSparkMax rightShooter = new CANSparkMax(8, MotorType.kBrushed);
 
     public Components() {
-        rightUpperShooter.follow(leftUpperShooter,true);
-        rightLowerShooter.follow(leftLowerShooter,false);
-        intakeSmallBar.follow(intakeBigBar,false);
+        leftShooter.setInverted(false);
+        rightShooter.setInverted(true);
+        rightBelt.setInverted(true)
+        leftBelt.follow(rightBelt,true);
+        //intakeSmallBar.follow(intakeBigBar,false);
     }
 }

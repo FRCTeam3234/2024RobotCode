@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ComponentsControl {
     //Variable Defintions
-    private final double shooterHighSpeed = 1.0;
+    private final double shooterHighSpeed = 0.8;
     private final double shooterLowSpeed = 0.3;
     private final double intakeInSpeed = 1.0;
     private final double baseClimbSpeed = 0.45;
@@ -16,21 +16,24 @@ public class ComponentsControl {
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         //Variable Defintions
         double shooterSpeed = 0.0;
+        double beltSpeed = 0.0;
         double intakeSpeed = 0.0;
         double climbLeftSpeed = 0.0;
         double climbRightSpeed = 0.0;
 
         if (controlInputs.shootHigh) {
             shooterSpeed = shooterHighSpeed;
+            beltSpeed = 1.0;
             intakeSpeed = -intakeInSpeed;
         } else if (controlInputs.shootLow) {
             shooterSpeed = shooterLowSpeed;
+            beltSpeed = 1.0;
             intakeSpeed = -intakeInSpeed;
         }
 
         if (controlInputs.intakeIn) {
             if (!controlInputs.intakeSensorOff) {
-                if (!sensorInputs.intakeLimitHome) {
+                if (!sensorInputs.intakeProxySensor) {
                     intakeSpeed = intakeInSpeed;
                 }
             } else {
@@ -59,9 +62,12 @@ public class ComponentsControl {
         SmartDashboard.putNumber("Left Climb Speed", climbLeftSpeed);
         SmartDashboard.putNumber("Right Climb Speed", climbRightSpeed);
 
-        components.leftLowerShooter.set(shooterSpeed);
-        components.leftUpperShooter.set(shooterSpeed);
+        components.leftShooter.set(shooterSpeed);
+        components.rightShooter.set( Math.max(0, shooterSpeed-0.05) );
+        components.rightBelt.set(beltSpeed);
+
         components.intakeBigBar.set(intakeSpeed);
+        
         components.climbLeft.set(powerClamp(climbLeftSpeed));
         components.climbRight.set(powerClamp(climbRightSpeed));
     }
