@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class ControlInputs {
@@ -51,6 +52,7 @@ public class ControlInputs {
         shootHigh = componentsBoardRight.getRawButton(shootHighId);
         shootLow = componentsBoardRight.getRawButton(shootLowId);
         intakeSensorOff = (componentsBoardRight.getX() <= -0.5);
+        SmartDashboard.putBoolean("Intake Sensor Off", intakeSensorOff);
         //Components Board Left
         intakeOut  = componentsBoardLeft.getRawButton(intakeOutId);
         intakeEStop = (componentsBoardLeft.getX() <= -0.5);
