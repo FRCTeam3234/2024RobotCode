@@ -24,11 +24,11 @@ public class ComponentsControl {
         if (controlInputs.shootHigh) {
             shooterSpeed = shooterHighSpeed;
             beltSpeed = 1.0;
-            intakeSpeed = -intakeInSpeed;
+            intakeSpeed = -0.2;
         } else if (controlInputs.shootLow) {
             shooterSpeed = shooterLowSpeed;
             beltSpeed = 1.0;
-            intakeSpeed = -intakeInSpeed;
+            intakeSpeed = -0.2;
         }
 
         if (controlInputs.intakeIn) {
@@ -57,7 +57,8 @@ public class ComponentsControl {
             climbRightSpeed = climbUpSpeed;
         }
 
-        SmartDashboard.putNumber("Shooter Speed", shooterSpeed);
+        SmartDashboard.putNumber("Shooter Left Speed", shooterSpeed);
+        SmartDashboard.putNumber("Shooter Right Speed", Math.max(0, shooterSpeed-0.05) );
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
         SmartDashboard.putNumber("Left Climb Speed", climbLeftSpeed);
         SmartDashboard.putNumber("Right Climb Speed", climbRightSpeed);
@@ -66,7 +67,7 @@ public class ComponentsControl {
         components.rightShooter.set( Math.max(0, shooterSpeed-0.05) );
         components.rightBelt.set(beltSpeed);
 
-        components.intakeBigBar.set(intakeSpeed);
+        components.intakeBars.set(intakeSpeed);
         
         components.climbLeft.set(powerClamp(climbLeftSpeed));
         components.climbRight.set(powerClamp(climbRightSpeed));

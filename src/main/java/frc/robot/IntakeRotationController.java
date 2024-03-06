@@ -1,8 +1,10 @@
 package frc.robot;
 
+import java.util.OptionalInt;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class IntakeRotationControl {
+public class IntakeRotationController {
     //Variable Defintions
     private boolean emergencyStopped = false;
     private final double rotationMaxSpeed = 1.0; //Must be a + value
@@ -10,11 +12,23 @@ public class IntakeRotationControl {
     private final double motionScalerConstant = 0.06;
     private boolean homed = false;
 
-    //Run the components
+    //Define all intake cases here
+    private final OptionalInt getTarget(int encoderPosition, ControlInputs controlInputs, SensorInputs sensorInputs) {
+        //Out position
+        if (controlInputs.intakeOut && encoderPosition < 1075) return OptionalInt.of(1075);
+        
+        //Return to 0 until limit switch is pressed
+        if (controlInputs.intakeOut == false && sensorInputs.intakeLimitHome == false) return OptionalInt.of(0);
+        
+        //Default case is to not move
+        return OptionalInt.empty();
+    }
+
+    //Run the intake
     public final void runRotation(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         //Variable Defintions
         int encoderPosition = sensorInputs.intakeEncoder.get(); //Assume this value is + towards out
-        int target = encoderPosition;
+        OptionalInt target = OptionalInt.empty();
         SmartDashboard.putNumber("Intake Rotation Count", encoderPosition);
 
         //EStop Controls
@@ -25,21 +39,17 @@ public class IntakeRotationControl {
         }
 
         //Intake Target Controls
-        if (controlInputs.intakeOut) {
-            target = 972;
-        } else if (sensorInputs.intakeLimitHome == false) {
-            target = 0;
-        }
-        //Otherwise target will equal the current encoder position
+        target = getTarget(encoderPosition, controlInputs, sensorInputs);  
 
         //Prevent target from being less then zero (for saftey)
-        if (target < 0) {
-            target = 0;
-        }
+        if (target.orElse(0) < 0) target = OptionalInt.empty();
+        SmartDashboard.putString("Intake Target", target.isPresent() ? target.getAsInt()+"" : "null" );
         
         double intakePower = 0.0;
         if (homed) {
-            intakePower = rotationMath(target, encoderPosition);
+            if (target.isPresent()) {
+                intakePower = rotationMath(target.getAsInt(), encoderPosition);
+            }
         } else {
             intakePower = rotationHome(sensorInputs);
         }

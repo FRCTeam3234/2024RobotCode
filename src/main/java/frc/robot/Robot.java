@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
   private final SensorInputs sensorInputs = new SensorInputs();
   private Components components = new Components();
   private final ComponentsControl componentsControl = new ComponentsControl();
-  private final IntakeRotationControl intakeRotationControl = new IntakeRotationControl();
+  private final IntakeRotationController intakeRotationControl = new IntakeRotationController();
 
   //Variable Initiation
 
