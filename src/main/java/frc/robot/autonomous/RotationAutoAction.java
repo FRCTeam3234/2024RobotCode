@@ -1,4 +1,4 @@
-package frc.robot.auto;
+package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Components;

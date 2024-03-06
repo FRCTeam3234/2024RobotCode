@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
-import frc.robot.auto.AutoAction;
-import frc.robot.auto.DoNothingAutoAction;
-import frc.robot.auto.MoveInlineAutoAction;
-import frc.robot.auto.RotationAutoAction;
-import frc.robot.auto.ShootAutoAction;
+import frc.robot.autonomous.AutoAction;
+import frc.robot.autonomous.DoNothingAutoAction;
+import frc.robot.autonomous.MoveInlineAutoAction;
+import frc.robot.autonomous.RotationAutoAction;
+import frc.robot.autonomous.ShootAutoAction;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
