@@ -10,7 +10,7 @@ public class ComponentsControl {
     private final double baseClimbSpeed = 0.45;
     private final double climbUpSpeed = 0.25;
     private final double climbLevelTolerance = 5.0;
-    private final double climbConstant = 0.05;
+    private final double climbConstant = 0.1;
     
     //Run the components
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
@@ -45,16 +45,22 @@ public class ComponentsControl {
             climbLeftSpeed = -baseClimbSpeed;
             climbRightSpeed = -baseClimbSpeed;
 
-            if (sensorInputs.currentRollDegrees > climbLevelTolerance) { //Right side too low
-                double rightPowerAddition = climbConstant * Math.abs(sensorInputs.currentRollDegrees);
-                climbRightSpeed -= rightPowerAddition;
-            } else if (sensorInputs.currentRollDegrees < -climbLevelTolerance) { //Left side too low
-                double leftPowerAddition = climbConstant * Math.abs(sensorInputs.currentRollDegrees);
-                climbLeftSpeed -= leftPowerAddition;
+            if (sensorInputs.currentRollDegrees > climbLevelTolerance && sensorInputs.currentRollDegrees < 180) { //Right side too low
+                climbLeftSpeed += climbConstant;
+                climbRightSpeed -= climbConstant;
+            } else if (sensorInputs.currentRollDegrees < (360-climbLevelTolerance) && sensorInputs.currentRollDegrees > 180) { //Left side too low
+                climbLeftSpeed -= climbConstant;
+                climbRightSpeed += climbConstant;
             }
+
+            if (components.climbLeft.getEncoder().getPosition() <= 0) climbLeftSpeed = 0.0;
+            if (components.climbRight.getEncoder().getPosition() <= 0) climbRightSpeed = 0.0;
         } else if (controlInputs.climbUp) {
             climbLeftSpeed = climbUpSpeed;
             climbRightSpeed = climbUpSpeed;
+
+            if (components.climbLeft.getEncoder().getPosition() >= 180) climbLeftSpeed = 0.0;
+            if (components.climbRight.getEncoder().getPosition() >= 180) climbRightSpeed = 0.0;
         }
 
         SmartDashboard.putNumber("Shooter Left Speed", shooterSpeed);
@@ -62,6 +68,8 @@ public class ComponentsControl {
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
         SmartDashboard.putNumber("Left Climb Speed", climbLeftSpeed);
         SmartDashboard.putNumber("Right Climb Speed", climbRightSpeed);
+        SmartDashboard.putNumber("Left Climb Encoder", components.climbLeft.getEncoder().getPosition());
+        SmartDashboard.putNumber("Right Climb Encoder", components.climbRight.getEncoder().getPosition());
 
         components.leftShooter.set(shooterSpeed);
         components.rightShooter.set( Math.max(0, shooterSpeed-0.05) );

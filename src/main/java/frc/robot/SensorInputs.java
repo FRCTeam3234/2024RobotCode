@@ -33,7 +33,7 @@ public class SensorInputs {
         //NavX
         currentPitchDegrees = convertTo360(navxAhrs.getPitch());
         currentYawDegrees = convertTo360(navxAhrs.getYaw());
-        currentRollDegrees = convertTo360(navxAhrs.getRoll());
+        currentRollDegrees = convertTo360(-navxAhrs.getRoll());
         drivetrainRotation = Rotation2d.fromDegrees(currentYawDegrees);
         SmartDashboard.putNumber("NavX Pitch", currentPitchDegrees);
         SmartDashboard.putNumber("NavX Yaw", currentYawDegrees);

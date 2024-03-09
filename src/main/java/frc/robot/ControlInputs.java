@@ -51,8 +51,8 @@ public class ControlInputs {
         intakeIn = componentsBoardRight.getRawButton(intakeInId);
         shootHigh = componentsBoardRight.getRawButton(shootHighId);
         shootLow = componentsBoardRight.getRawButton(shootLowId);
-        intakeSensorOff = (componentsBoardRight.getX() <= -0.5);
-        SmartDashboard.putBoolean("Intake Sensor Off", intakeSensorOff);
+        intakeSensorOff = (componentsBoardRight.getY() <= 0.5);
+        SmartDashboard.putBoolean("Intake Sensor", !intakeSensorOff);
         //Components Board Left
         intakeOut = componentsBoardLeft.getRawButton(intakeOutId);
         intakeEStop = (componentsBoardLeft.getX() <= -0.5);

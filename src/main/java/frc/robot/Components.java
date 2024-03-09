@@ -25,5 +25,13 @@ public class Components {
         rightBelt.setInverted(true);
         leftBelt.follow(rightBelt,true);
         intakeRotation.setInverted(true);
+        intakeBars.setInverted(false);
+        climbLeft.setInverted(true);
+        climbRight.setInverted(false);
+
+        climbLeft.getEncoder().setPosition(0.0);
+        climbRight.getEncoder().setPosition(0.0);
+        climbLeft.getEncoder().setPositionConversionFactor(1);
+        climbRight.getEncoder().setPositionConversionFactor(1);
     }
 }
