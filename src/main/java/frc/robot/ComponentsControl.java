@@ -42,6 +42,7 @@ public class ComponentsControl {
         }
 
         if (controlInputs.climbDown) {
+            //588 revolutions
             climbLeftSpeed = -baseClimbSpeed;
             climbRightSpeed = -baseClimbSpeed;
 

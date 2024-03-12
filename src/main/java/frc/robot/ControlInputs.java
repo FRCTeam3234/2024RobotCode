@@ -40,6 +40,7 @@ public class ControlInputs {
     public boolean shootLow = false;
     public boolean climbUp = false;
     public boolean climbDown = false;
+    public boolean limelightDrive = false;
 
     //Reading the controls
     public final void readControls(ComponentsControl componentsControl) {
@@ -59,6 +60,8 @@ public class ControlInputs {
         //Drive Controller Climb
         climbDown = driveStick.getAButton();
         climbUp = driveStick.getYButton();
+        //Using Limelight
+        limelightDrive = driveStick.getBButton();
     }
 
     //For later

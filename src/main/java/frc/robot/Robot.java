@@ -15,6 +15,7 @@ import frc.robot.autonomous.DoNothingAutoAction;
 import frc.robot.autonomous.MoveInlineAutoAction;
 import frc.robot.autonomous.RotationAutoAction;
 import frc.robot.autonomous.ShootAutoAction;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -118,8 +119,14 @@ public class Robot extends TimedRobot {
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
     intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
+    if(controlInputs.limelightDrive){
+      double angularVelocity = Limelight.limelight_aim_proportional();
+      double fowardVelocity = Limelight.limelight_range_proportional();
+      driveTrain.mecanumDrive(0, fowardVelocity, angularVelocity, new Rotation2d());
+    } else {
+      driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
+    }
 
-    driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }
 
   @Override
