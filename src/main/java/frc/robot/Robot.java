@@ -28,11 +28,15 @@ public class Robot extends TimedRobot {
   private final DriveTrain driveTrain = new DriveTrain();
   private final ControlInputs controlInputs = new ControlInputs();
   private final SensorInputs sensorInputs = new SensorInputs();
-  private Components components = new Components();
+  private final Components components = new Components();
   private final ComponentsControl componentsControl = new ComponentsControl();
-  private final IntakeRotationController intakeRotationControl = new IntakeRotationController();
+  private final IntakeRotationController intakeRotationController = new IntakeRotationController();
 
   //Variable Initiation
+  private String modeSelected;
+  private final String modeTele = "Normal Mode";
+  private final String modeService = "Service Mode";
+  private SendableChooser<String> mode_chooser = new SendableChooser<String>();
 
   //Auto Variable Initiation
   private String autoSelected;
@@ -50,6 +54,13 @@ public class Robot extends TimedRobot {
 
     //Camera Setup
     CameraServer.startAutomaticCapture("Main Camera", 0);
+
+    //Mode Chooser
+    mode_chooser.addOption(modeTele, modeTele);
+    mode_chooser.addOption(modeService, modeService);
+    mode_chooser.setDefaultOption(modeTele, modeTele);
+
+    SmartDashboard.putData("Mode Chooser", mode_chooser);
 
     //Auto Chooser
     auto_chooser.addOption(autoModeNull, autoModeNull);
@@ -114,10 +125,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    controlInputs.readControls(componentsControl);
+    modeSelected = mode_chooser.getSelected();
+
+    controlInputs.readControls(componentsControl, modeSelected);
     sensorInputs.readSensors();
-    componentsControl.runComponents(components, controlInputs, sensorInputs);
-    intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
+    componentsControl.runComponents(components, controlInputs, sensorInputs, intakeRotationController);
 
     driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }

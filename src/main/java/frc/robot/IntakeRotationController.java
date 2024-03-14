@@ -1,7 +1,6 @@
 package frc.robot;
 
 import java.util.OptionalInt;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeRotationController {
@@ -9,11 +8,12 @@ public class IntakeRotationController {
     private boolean emergencyStopped = false;
     private final double rotationMaxSpeed = 1.0; //Must be a + value
     private final double rotationMinSpeed = 0.4; //Must be a + value
-    private final double motionScalerConstant = 0.06;
+    private final double motionScalerConstant = 0.03;
     private boolean homed = false;
+    private OptionalInt target = OptionalInt.empty();
 
     //Define all intake cases here
-    private final OptionalInt getTarget(int encoderPosition, ControlInputs controlInputs, SensorInputs sensorInputs) {
+    /*private final OptionalInt getTarget(int encoderPosition, ControlInputs controlInputs, SensorInputs sensorInputs) {
         //Out position
         if (controlInputs.intakeOut && encoderPosition < 1075) return OptionalInt.of(1075);
         
@@ -22,13 +22,30 @@ public class IntakeRotationController {
         
         //Default case is to not move
         return OptionalInt.empty();
+    }*/
+
+    public final void setTarget(OptionalInt setTarget) {
+        if (setTarget == null) {
+            target = OptionalInt.empty();
+            return;
+        }
+        if (setTarget.getClass().getName() != "java.util.OptionalInt") {
+            target = OptionalInt.empty();
+            return;
+        }
+        if (setTarget.isPresent()) {
+            target = setTarget;
+            return;
+        } else {
+            target = OptionalInt.empty();
+            return;
+        }
     }
 
     //Run the intake
     public final void runRotation(Components components, ControlInputs controlInputs, SensorInputs sensorInputs) {
         //Variable Defintions
         int encoderPosition = sensorInputs.intakeEncoder.get(); //Assume this value is + towards out
-        OptionalInt target = OptionalInt.empty();
         SmartDashboard.putNumber("Intake Rotation Count", encoderPosition);
 
         //EStop Controls
@@ -37,9 +54,6 @@ public class IntakeRotationController {
         if (emergencyStopped) {
             return;
         }
-
-        //Intake Target Controls
-        target = getTarget(encoderPosition, controlInputs, sensorInputs);  
 
         //Prevent target from being less then zero (for saftey)
         if (target.orElse(0) < 0) target = OptionalInt.empty();

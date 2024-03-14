@@ -40,9 +40,12 @@ public class ControlInputs {
     public boolean shootLow = false;
     public boolean climbUp = false;
     public boolean climbDown = false;
+    public boolean lowerLeftClimb = false;
+    public boolean lowerRightClimb = false;
+    public boolean lowerAmpRamp = false;
 
     //Reading the controls
-    public final void readControls(ComponentsControl componentsControl) {
+    public final void readControls(ComponentsControl componentsControl, String modeSelected) {
         //Drivestick
         driveStickX = ( driveStick.getLeftX() * Math.abs(driveStick.getLeftX()) ) * driveStickMaxMovement;
         driveStickY = ( driveStick.getLeftY() * Math.abs(driveStick.getLeftY()) ) * driveStickMaxMovement;
@@ -57,8 +60,19 @@ public class ControlInputs {
         intakeOut = componentsBoardLeft.getRawButton(intakeOutId);
         intakeEStop = (componentsBoardLeft.getX() <= -0.5);
         //Drive Controller Climb
-        climbDown = driveStick.getAButton();
-        climbUp = driveStick.getYButton();
+        if (modeSelected == "Normal Mode") {
+            climbDown = driveStick.getAButton();
+            climbUp = driveStick.getYButton();
+            lowerLeftClimb = false;
+            lowerRightClimb = false;
+            lowerAmpRamp = false;
+        } else if (modeSelected == "Service Mode") {
+            climbDown = false;
+            climbUp = false;
+            lowerLeftClimb = driveStick.getXButton();
+            lowerRightClimb = driveStick.getBButton();
+            lowerAmpRamp = driveStick.getAButton();
+        }
     }
 
     //For later
