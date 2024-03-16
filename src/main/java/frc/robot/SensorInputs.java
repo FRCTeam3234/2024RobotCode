@@ -14,10 +14,12 @@ public class SensorInputs {
     private DigitalInput intakePhotoEyeSensor = new DigitalInput(1);
     private final AHRS navxAhrs = new AHRS(Port.kMXP);
     public final Encoder intakeEncoder = new Encoder(8, 9);
-    
+    private DigitalInput shooterPhotoEyeSensor = new DigitalInput(2);
+
     //Variable Defintions
     public boolean intakeLimitHome = false;
     public boolean intakeProxySensor = false;
+    public boolean shooterProxySensor = false;
     public float currentPitchDegrees = (float) 0.0;
     public float currentYawDegrees = (float) 0.0;
     public float currentRollDegrees = (float) 0.0;
@@ -30,6 +32,10 @@ public class SensorInputs {
         intakeProxySensor = !intakePhotoEyeSensor.get();
         SmartDashboard.putBoolean("Intake Photoeye", intakeProxySensor);
         
+        //Shooter
+        shooterProxySensor = !shooterPhotoEyeSensor.get();
+        SmartDashboard.putBoolean("Shooter Photoeye", shooterProxySensor);
+
         //NavX
         currentPitchDegrees = convertTo360(navxAhrs.getPitch());
         currentYawDegrees = convertTo360(navxAhrs.getYaw());

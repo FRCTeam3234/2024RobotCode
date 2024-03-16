@@ -1,46 +1,120 @@
 package frc.robot;
 
 import java.util.OptionalInt;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ComponentsControl {
     //Variable Defintions
     private final double shooterHighSpeed = 1.0;
-    private final double shooterLowSpeed = 0.3;
+    private final double shooterLowSpeed = 0.065;
     private final double intakeInSpeed = 1.0;
     private final double baseClimbSpeed = 0.45;
     private final double climbUpSpeed = 0.25;
     private final double climbLevelTolerance = 5.0;
     private final double climbConstant = 0.1;
     private final double ampRampConstant = 1.0;
+    private final double ampRampJerkConstant = 0.4;
+    private boolean ampOutVsIn = true;
+    
+    private boolean delay = false;
+    private long delayStart;
+    private boolean shootLow = false;
+    private boolean shootHigh = false;
+    private final double delayAmount = 1.0;
+
+    private boolean delayRamp = false;
+    private long delayRampStart;
+    private boolean ampRampButton = false;
+    private final double delayRampAmount = 0.7;
     
     //Run the components
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs, IntakeRotationController intakeRotationController) {
         //Variable Defintions
-        double shooterSpeed = 0.0;
+        double shooterLeftSpeed = 0.0;
+        double shooterRightSpeed = 0.0;
         double beltSpeed = 0.0;
         double intakeSpeed = 0.0;
         double climbLeftSpeed = 0.0;
         double climbRightSpeed = 0.0;
         double ampRampSpeed = 0.0;
 
+        //==Shooter Button Delayed==
+        if (delay == false) {
+            if (controlInputs.shootHigh) {
+                shootHigh = true;
+                shootLow = false;
+            } else if (controlInputs.shootLow) {
+                shootHigh = false;
+                shootLow = true;
+            }
+            if (shootHigh || shootLow) {
+                if (controlInputs.shootHigh == false && controlInputs.shootLow == false) {
+                    shootHigh = false;
+                    shootLow = false;
+                    delay = true;
+                    delayStart = System.currentTimeMillis();
+                }
+            }
+        } else {
+            if ( (System.currentTimeMillis() - delayStart) >= (delayAmount * 1000) ) delay = false;
+        }
+
+        //==Amp Ramp Delay==
+        /**if (shootLow) {
+            if (delayRamp == false) {
+                delayRampStart = System.currentTimeMillis();
+                delayRamp = true;
+            } else {
+                if ( (System.currentTimeMillis() - delayRampStart) >= (delayRampAmount * 1000) ) {
+                    ampRampButton = true;
+                }
+            }
+        } else {
+            delayRamp = false;
+            ampRampButton = false;
+        }**/
+        if (shootLow) {
+            if (delayRamp == false) {
+                if (sensorInputs.shooterProxySensor) {
+                    delayRampStart = System.currentTimeMillis();
+                    delayRamp = true;
+                }
+            } else {
+                if ( (System.currentTimeMillis() - delayRampStart) >= (delayRampAmount * 1000) ) {
+                    ampRampButton = true;
+                }
+            }
+        } else {
+            delayRamp = false;
+            ampRampButton = false;
+        }
+
         //==Shooter==
-        if (controlInputs.shootHigh) {
-            shooterSpeed = shooterHighSpeed;
+        if (shootHigh) {
+            shooterLeftSpeed = shooterHighSpeed;
+            shooterRightSpeed = (shooterHighSpeed-0.05);
             beltSpeed = 1.0;
             intakeSpeed = -0.5;
-        } else if (controlInputs.shootLow) {
-            shooterSpeed = shooterLowSpeed;
-            beltSpeed = 1.0;
+        } else if (shootLow) {
+            shooterLeftSpeed = shooterLowSpeed;
+            shooterRightSpeed = shooterLowSpeed;
+            beltSpeed = 0.6;
             intakeSpeed = -0.5;
         }
 
         //==Amp Ramp==
         if (controlInputs.lowerAmpRamp) {
             ampRampSpeed = -ampRampConstant;
-        } else if (controlInputs.shootLow) {
-            ampRampSpeed = ampRampConstant;
-            if (components.ampRamp.getEncoder().getPosition() >= 46) ampRampSpeed = 0.0;
+        } else if (ampRampButton) {
+            if (ampOutVsIn) {
+                ampRampSpeed = ampRampJerkConstant;
+            } else {
+                ampRampSpeed = -ampRampJerkConstant;
+            }
+            
+            if (components.ampRamp.getEncoder().getPosition() >= 55) ampOutVsIn = false;
+            if (components.ampRamp.getEncoder().getPosition() <= 36) ampOutVsIn = true;
         } else {
             ampRampSpeed = -ampRampConstant;
             if (components.ampRamp.getEncoder().getPosition() <= 4) ampRampSpeed = 0.0;
@@ -97,8 +171,8 @@ public class ComponentsControl {
         }
 
         //==Display and set==
-        SmartDashboard.putNumber("Shooter Left Speed", shooterSpeed);
-        SmartDashboard.putNumber("Shooter Right Speed", Math.max(0, shooterSpeed-0.05) );
+        SmartDashboard.putNumber("Shooter Left Speed", shooterLeftSpeed);
+        SmartDashboard.putNumber("Shooter Right Speed", shooterRightSpeed);
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
         SmartDashboard.putNumber("Left Climb Speed", climbLeftSpeed);
         SmartDashboard.putNumber("Right Climb Speed", climbRightSpeed);
@@ -107,8 +181,8 @@ public class ComponentsControl {
         SmartDashboard.putNumber("Amp Ramp Speed", ampRampSpeed);
         SmartDashboard.putNumber("Amp Ramp Encoder", components.ampRamp.getEncoder().getPosition());
 
-        components.leftShooter.set(shooterSpeed);
-        components.rightShooter.set( Math.max(0, shooterSpeed-0.05) );
+        components.leftShooter.set(shooterLeftSpeed);
+        components.rightShooter.set(shooterRightSpeed);
         components.rightBelt.set(beltSpeed);
 
         components.intakeBars.set(intakeSpeed);
