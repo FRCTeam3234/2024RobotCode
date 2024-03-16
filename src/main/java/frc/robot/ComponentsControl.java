@@ -12,7 +12,7 @@ public class ComponentsControl {
     private final double climbUpSpeed = 0.25;
     private final double climbLevelTolerance = 5.0;
     private final double climbConstant = 0.1;
-    private final double ampRampConstant = 0.15;
+    private final double ampRampConstant = 1.0;
     
     //Run the components
     public void runComponents(Components components, ControlInputs controlInputs, SensorInputs sensorInputs, IntakeRotationController intakeRotationController) {
@@ -28,11 +28,11 @@ public class ComponentsControl {
         if (controlInputs.shootHigh) {
             shooterSpeed = shooterHighSpeed;
             beltSpeed = 1.0;
-            intakeSpeed = -0.2;
+            intakeSpeed = -0.5;
         } else if (controlInputs.shootLow) {
             shooterSpeed = shooterLowSpeed;
             beltSpeed = 1.0;
-            intakeSpeed = -0.2;
+            intakeSpeed = -0.5;
         }
 
         //==Amp Ramp==
@@ -40,10 +40,10 @@ public class ComponentsControl {
             ampRampSpeed = -ampRampConstant;
         } else if (controlInputs.shootLow) {
             ampRampSpeed = ampRampConstant;
-            if (components.ampRamp.getEncoder().getPosition() >= 2.4) ampRampSpeed = 0.0;
+            if (components.ampRamp.getEncoder().getPosition() >= 46) ampRampSpeed = 0.0;
         } else {
             ampRampSpeed = -ampRampConstant;
-            if (components.ampRamp.getEncoder().getPosition() <= 0) ampRampSpeed = -0.05;
+            if (components.ampRamp.getEncoder().getPosition() <= 4) ampRampSpeed = 0.0;
         }
 
         //==Intake==

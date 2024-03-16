@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkFlex;
 
 public class Components {
     //Components Definitions
@@ -11,7 +10,7 @@ public class Components {
         //Tele
     public final CANSparkMax climbLeft = new CANSparkMax(12, MotorType.kBrushless);
     public final CANSparkMax climbRight = new CANSparkMax(13, MotorType.kBrushless);
-    public final CANSparkFlex ampRamp = new CANSparkFlex(6, MotorType.kBrushless);
+    public final CANSparkMax ampRamp = new CANSparkMax(6, MotorType.kBrushless);
 
         //Both
     public final CANSparkMax intakeBars = new CANSparkMax(5, MotorType.kBrushless);
