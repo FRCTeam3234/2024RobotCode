@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
   private final String autoLeave = "Leave";
   private final String autoTurnTest = "Turn Test";
   private final String autoSpeaker = "Speaker n Leave";
+  private final String autoSpeakerShoot2 = "Speaker Shoot 2";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -65,8 +66,9 @@ public class Robot extends TimedRobot {
     //Auto Chooser
     auto_chooser.addOption(autoModeNull, autoModeNull);
     auto_chooser.addOption(autoLeave, autoLeave);
-    auto_chooser.addOption(autoTurnTest, autoTurnTest);
+    //auto_chooser.addOption(autoTurnTest, autoTurnTest);
     auto_chooser.addOption(autoSpeaker, autoSpeaker);
+    //auto_chooser.addOption(autoSpeakerShoot2, autoSpeakerShoot2);
     auto_chooser.setDefaultOption(autoModeNull, autoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
@@ -91,8 +93,12 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new DoNothingAutoAction());
         break;
       case autoSpeaker:
-        autonomousSequence.add(new ShootAutoAction(5.0, 1.0));
+        autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
         autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
+        autonomousSequence.add(new DoNothingAutoAction());
+      case autoSpeakerShoot2:
+        autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
+        autonomousSequence.add(new MoveInlineAutoAction(2.0, 26.0, 2.0));
         autonomousSequence.add(new DoNothingAutoAction());
       default:
         autonomousSequence.add(new DoNothingAutoAction());
@@ -114,8 +120,7 @@ public class Robot extends TimedRobot {
           autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
         }
       }
-    }
-    else {
+    } else {
       driveTrain.mecanumDrive(0, 0, 0, driveTrain.defaultRotation2d);
     }
   }

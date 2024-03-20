@@ -10,7 +10,7 @@ public class ComponentsControl {
     private final double shooterLowSpeed = 0.065;
     private final double intakeInSpeed = 1.0;
     private final double baseClimbSpeed = 0.45;
-    private final double climbUpSpeed = 0.25;
+    private final double climbUpSpeed = 1.0;
     private final double climbLevelTolerance = 5.0;
     private final double climbConstant = 0.1;
     private final double ampRampConstant = 1.0;
@@ -113,8 +113,8 @@ public class ComponentsControl {
                 ampRampSpeed = -ampRampJerkConstant;
             }
             
-            if (components.ampRamp.getEncoder().getPosition() >= 55) ampOutVsIn = false;
-            if (components.ampRamp.getEncoder().getPosition() <= 36) ampOutVsIn = true;
+            if (components.ampRamp.getEncoder().getPosition() >= 45) ampOutVsIn = false;
+            if (components.ampRamp.getEncoder().getPosition() <= 26) ampOutVsIn = true;
         } else {
             ampRampSpeed = -ampRampConstant;
             if (components.ampRamp.getEncoder().getPosition() <= 4) ampRampSpeed = 0.0;
