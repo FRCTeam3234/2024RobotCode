@@ -8,6 +8,7 @@ public class IntakeRotationController {
     private boolean emergencyStopped = false;
     private final double rotationMaxSpeed = 1.0; //Must be a + value
     private final double rotationMinSpeed = 0.4; //Must be a + value
+    private final double rotationHomeSpeed = 1.0; //Must be a + value
     private final double motionScalerConstant = 0.03;
     private boolean homed = false;
     private OptionalInt target = OptionalInt.empty();
@@ -102,7 +103,7 @@ public class IntakeRotationController {
     private final double rotationHome(SensorInputs sensorInputs) {
         if (sensorInputs.intakeLimitHome == false) {
             SmartDashboard.putString("Intake Movement", "In (Homing)");
-            return -rotationMinSpeed;
+            return -rotationHomeSpeed;
         } else {
             homed = true;
             sensorInputs.intakeEncoder.reset();
