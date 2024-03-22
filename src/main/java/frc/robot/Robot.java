@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new DoNothingAutoAction());
       case autoSpeakerAngled:
         autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
-        autonomousSequence.add(new MoveInlineAutoAction(2.0, 8.0, 2.0));
+        autonomousSequence.add(new MoveInlineAutoAction(2.0, 24.0, 2.0));
         autonomousSequence.add(new RotationAutoAction(0.0));
         autonomousSequence.add(new MoveInlineAutoAction(3.0, 80.0, 2.0));
         autonomousSequence.add(new DoNothingAutoAction());
