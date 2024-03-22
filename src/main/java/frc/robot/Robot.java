@@ -43,9 +43,9 @@ public class Robot extends TimedRobot {
   private final String autoModeNull = "Do Nothing";
   private final String autoLeave = "Leave";
   private final String autoTurnTest = "Turn Test";
-  private final String autoSpeaker = "Speaker n Leave";
+  private final String autoSpeaker = "Shoot n Scoot";
   private final String autoSpeakerShoot2 = "Speaker Shoot 2";
-  private final String autoSpeakerAngled = "Speaker Angled n Leave";
+  private final String autoSpeakerAngled = "Angled Shoot n Scoot";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
