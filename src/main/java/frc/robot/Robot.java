@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
   private final String autoTurnTest = "Turn Test";
   private final String autoSpeaker = "Speaker n Leave";
   private final String autoSpeakerShoot2 = "Speaker Shoot 2";
+  private final String autoSpeakerAngled = "Speaker Angled n Leave";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -69,13 +70,16 @@ public class Robot extends TimedRobot {
     //auto_chooser.addOption(autoTurnTest, autoTurnTest);
     auto_chooser.addOption(autoSpeaker, autoSpeaker);
     //auto_chooser.addOption(autoSpeakerShoot2, autoSpeakerShoot2);
+    auto_chooser.addOption(autoSpeakerAngled, autoSpeakerAngled);
     auto_chooser.setDefaultOption(autoModeNull, autoModeNull);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
   }
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    sensorInputs.readSensors();
+  }
 
   @Override
   public void autonomousInit() {
@@ -99,6 +103,12 @@ public class Robot extends TimedRobot {
       case autoSpeakerShoot2:
         autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
         autonomousSequence.add(new MoveInlineAutoAction(2.0, 26.0, 2.0));
+        autonomousSequence.add(new DoNothingAutoAction());
+      case autoSpeakerAngled:
+        autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
+        autonomousSequence.add(new MoveInlineAutoAction(2.0, 8.0, 2.0));
+        autonomousSequence.add(new RotationAutoAction(0.0));
+        autonomousSequence.add(new MoveInlineAutoAction(3.0, 80.0, 2.0));
         autonomousSequence.add(new DoNothingAutoAction());
       default:
         autonomousSequence.add(new DoNothingAutoAction());

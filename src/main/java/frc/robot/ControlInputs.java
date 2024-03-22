@@ -58,7 +58,7 @@ public class ControlInputs {
         SmartDashboard.putBoolean("Intake Sensor", !intakeSensorOff);
         //Components Board Left
         intakeOut = componentsBoardLeft.getRawButton(intakeOutId);
-        intakeEStop = (componentsBoardLeft.getX() <= -0.5);
+        intakeEStop = (componentsBoardLeft.getX() >= 0.5 || componentsBoardLeft.getX() <= -0.5);
         //Drive Controller Climb
         if (modeSelected == "Normal Mode") {
             climbDown = driveStick.getAButton();

@@ -34,7 +34,7 @@ public class MoveInlineAutoAction extends AutoAction {
 
     @Override
     public void init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        auto.MoveInit(maxTime, distance, tolerance, moveK);
+        auto.MoveInit(maxTime, distance, tolerance, moveK, driveTrain);
     }
 
     @Override

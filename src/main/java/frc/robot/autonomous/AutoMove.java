@@ -14,12 +14,14 @@ public class AutoMove {
     static final double wheelDiameter = 6;
     private double rotationsToTravel;
     private double timeStarted;
+    private double startPosition;
 
     //To convert inches to encoder count do: inches * gearRatio / (diameter * pi)
-    public final void MoveInit(double maxTime, double inchesToTravel, double toleranceInEncoderCount, double scaler) {
+    public final void MoveInit(double maxTime, double inchesToTravel, double toleranceInEncoderCount, double scaler, DriveTrain driveTrain) {
 
         //Variable Defintions
         rotationsToTravel = inchesToTravel * gearRatio / (Math.PI * wheelDiameter);
+        startPosition = driveTrain.getFrontLeftPosition();
         timeStarted = Timer.getFPGATimestamp();
         
         //Smart Dashboard Output
@@ -32,13 +34,12 @@ public class AutoMove {
     public final boolean MoveExecute(DriveTrain driveTrain) {
         
         //Variable Defintions
-        double currentPosition = driveTrain.getFrontLeftPosition();
+        double currentPosition = (driveTrain.getFrontLeftPosition() - startPosition);
         double currentTime = ((Timer.getFPGATimestamp()) - timeStarted);
         double power = motion.getPower(currentPosition, currentTime);
         
         //Smart Dashboard Output
-        SmartDashboard.putNumber("Auto Left Current Position", driveTrain.getFrontLeftPosition());
-        SmartDashboard.putNumber("Auto Right Current Position", driveTrain.getFrontRightPosition());
+        SmartDashboard.putNumber("Auto Current Position", currentPosition);
         SmartDashboard.putNumber("Auto Motor Power", power);
 
         //Control drivetrain
