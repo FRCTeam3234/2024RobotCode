@@ -76,6 +76,13 @@ public class RotationAutoAction extends AutoAction {
         //Rotation
         double power = degreesLeft * proportionalScaler;
 
+        //Change power sign depending on direction
+        if (setDirection == direction.LEFT) {
+            power *= -1;
+        } else if (setDirection == direction.RIGHT) {
+            power *= 1;
+        }
+
         if (power > 0 && Math.abs(power) < minPower) power = minPower;
         if (power < 0 && Math.abs(power) < minPower) power = -minPower;
 
@@ -87,7 +94,9 @@ public class RotationAutoAction extends AutoAction {
     }
 
     @Override
-    public void finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
+    public void finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+        System.out.println("Rotation End");
+    }
 
     @Override
     public String toString() {
