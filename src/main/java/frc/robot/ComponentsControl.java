@@ -16,6 +16,7 @@ public class ComponentsControl {
     private final double ampRampConstant = 1.0;
     private final double ampRampJerkConstant = 0.4;
     private boolean ampOutVsIn = true;
+    private boolean intakeIn = false;
     
     private boolean delay = false;
     private long delayStart;
@@ -124,12 +125,21 @@ public class ComponentsControl {
         if (controlInputs.intakeIn) {
             if (!controlInputs.intakeSensorOff) {
                 if (!sensorInputs.intakeProxySensor) {
-                    intakeSpeed = intakeInSpeed;
+                    intakeIn = true;
                 }
             } else {
-                intakeSpeed = intakeInSpeed;
+                intakeIn = true;
+            }
+        } else {
+            if (!controlInputs.intakeSensorOff) {
+                if (sensorInputs.intakeProxySensor) {
+                    intakeIn = false;
+                }
+            } else {
+                intakeIn = false;
             }
         }
+        if (intakeIn) intakeSpeed = intakeInSpeed;
 
         if (controlInputs.intakeOut && sensorInputs.intakeEncoder.get() < 1075) {
             //Out position
