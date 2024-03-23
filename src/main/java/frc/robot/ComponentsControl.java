@@ -124,8 +124,10 @@ public class ComponentsControl {
         //==Intake==
         if (!controlInputs.intakeSensorOff) {
             if (controlInputs.intakeOut) {
-                if (controlInputs.intakeIn && !sensorInputs.intakeProxySensor) {
-                    intakeIn = true;
+                if (!sensorInputs.intakeProxySensor) {
+                    if (controlInputs.intakeIn) {
+                        intakeIn = true;
+                    }
                 } else {
                     intakeIn = false;
                 }
