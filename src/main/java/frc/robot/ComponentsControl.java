@@ -122,7 +122,25 @@ public class ComponentsControl {
         }
 
         //==Intake==
-        if (controlInputs.intakeIn) {
+        if (!controlInputs.intakeSensorOff) {
+            if (controlInputs.intakeOut) {
+                if (controlInputs.intakeIn && !sensorInputs.intakeProxySensor) {
+                    intakeIn = true;
+                } else {
+                    intakeIn = false;
+                }
+            } else {
+                intakeIn = false;
+            }
+        } else {
+            if (controlInputs.intakeIn) {
+                intakeIn = true;
+            } else {
+                intakeIn = false;
+            }
+        }
+
+        /**if (controlInputs.intakeIn) {
             if (!controlInputs.intakeSensorOff) {
                 if (!sensorInputs.intakeProxySensor) {
                     intakeIn = true;
@@ -138,7 +156,7 @@ public class ComponentsControl {
             } else {
                 intakeIn = false;
             }
-        }
+        }*/
         if (intakeIn) intakeSpeed = intakeInSpeed;
 
         if (controlInputs.intakeOut && sensorInputs.intakeEncoder.get() < 1075) {
