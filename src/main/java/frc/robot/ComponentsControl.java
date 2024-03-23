@@ -132,7 +132,9 @@ public class ComponentsControl {
                     intakeIn = false;
                 }
             } else {
-                intakeIn = false;
+                if (sensorInputs.intakeEncoder.get() <= 537) {
+                    intakeIn = false;
+                }
             }
         } else {
             if (controlInputs.intakeIn) {
