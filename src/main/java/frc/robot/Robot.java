@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.OptionalInt;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.robot.autonomous.AutoAction;
 import frc.robot.autonomous.DoNothingAutoAction;
+import frc.robot.autonomous.IntakeRotation;
 import frc.robot.autonomous.MoveInlineAutoAction;
 import frc.robot.autonomous.RotationAutoAction;
 import frc.robot.autonomous.ShootAutoAction;
@@ -44,7 +46,7 @@ public class Robot extends TimedRobot {
   private final String autoLeave = "Leave";
   private final String autoTurnTest = "Turn Test";
   private final String autoSpeaker = "Shoot n Scoot";
-  private final String autoSpeakerShoot2 = "Speaker Shoot 2";
+  private final String autoSpeakerShoot2 = "Speaker Double Shot";
   private final String autoSpeakerAngled = "Angled Shoot n Scoot";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
@@ -69,7 +71,7 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(autoLeave, autoLeave);
     //auto_chooser.addOption(autoTurnTest, autoTurnTest);
     auto_chooser.addOption(autoSpeaker, autoSpeaker);
-    //auto_chooser.addOption(autoSpeakerShoot2, autoSpeakerShoot2);
+    auto_chooser.addOption(autoSpeakerShoot2, autoSpeakerShoot2);
     auto_chooser.addOption(autoSpeakerAngled, autoSpeakerAngled);
     auto_chooser.setDefaultOption(autoModeNull, autoModeNull);
 
@@ -101,8 +103,13 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
         autonomousSequence.add(new DoNothingAutoAction());
       case autoSpeakerShoot2:
-        autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
+        autonomousSequence.add(new ShootAutoAction(2.0, 1.0));
         autonomousSequence.add(new MoveInlineAutoAction(2.0, 26.0, 2.0));
+        autonomousSequence.add(new IntakeRotation(true, true));
+        autonomousSequence.add(new MoveInlineAutoAction(2.0, 26.0, 2.0));
+        autonomousSequence.add(new IntakeRotation(false, false));
+        autonomousSequence.add(new MoveInlineAutoAction(4.0, (-26.0) + (-26.0), 2.0));
+        autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
         autonomousSequence.add(new DoNothingAutoAction());
       case autoSpeakerAngled:
         autonomousSequence.add(new ShootAutoAction(3.0, 1.0));
@@ -119,6 +126,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    if (components.autoIntakeOut) {
+      intakeRotationController.setTarget( OptionalInt.of(1075) );
+    } else {
+      intakeRotationController.setTarget( OptionalInt.of(0) );
+    }
+    intakeRotationController.runRotation(components, controlInputs, sensorInputs);
+
+    double intakeSpeed = 0.0;
+    if (components.autoIntakeRun && !sensorInputs.intakeProxySensor) intakeSpeed = 1.0;
+    components.intakeBars.set(intakeSpeed);
+
     if (autonomousSequence.size() > 0) {
       SmartDashboard.putString("Current Auto Action",
          autonomousSequence.get(0).toString());
