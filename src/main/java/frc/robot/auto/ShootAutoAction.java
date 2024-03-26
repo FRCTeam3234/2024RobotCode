@@ -4,7 +4,7 @@ import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
 
-public class ShootAutoAction extends AutoAction {
+public class ShootAutoAction implements AutoAction {
     private double timeToShoot;
     private double power;
     private long startTime;
@@ -34,6 +34,6 @@ public class ShootAutoAction extends AutoAction {
 
     @Override
     public String toString() {
-        return "Auto: Shoot";
+        return "Shoot";
     } 
 }

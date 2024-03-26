@@ -4,15 +4,13 @@
 
 package frc.robot;
 
-import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.auto.AutoAction;
-import frc.robot.auto.DoNothingAutoAction;
-import frc.robot.auto.MoveInlineAutoAction;
-import frc.robot.auto.RotationAutoAction;
+import frc.robot.auto.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,7 +35,7 @@ public class Robot extends TimedRobot {
   private final String autoModeNull = "Do Nothing";
   private final String autoLeave = "Leave";
   private final String autoTurnTest = "Turn Test";
-  private ArrayList<AutoAction> autonomousSequence;
+  private SequentialAutoAction autonomous;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
   @Override
@@ -59,8 +57,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autonomousSequence = new ArrayList<AutoAction>();
     autoSelected = auto_chooser.getSelected();
+    Queue<AutoAction> autonomousSequence = new LinkedList<>();
     switch (autoSelected) {
       case autoLeave:
         autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
@@ -75,24 +73,15 @@ public class Robot extends TimedRobot {
         autonomousSequence.add(new DoNothingAutoAction());
         break;
     }
-    autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
+    autonomous = new SequentialAutoAction(autoSelected, autonomousSequence);
+    autonomous.init(driveTrain, components, sensorInputs);
   }
 
   @Override
   public void autonomousPeriodic() {
-    if (autonomousSequence.size() > 0) {
-      SmartDashboard.putString("Current Auto Action",
-         autonomousSequence.get(0).toString());
-      sensorInputs.readSensors();
-      if (autonomousSequence.get(0).execute(driveTrain, components, sensorInputs)) {
-        autonomousSequence.get(0).finalize(driveTrain, components, sensorInputs);
-        autonomousSequence.remove(0);
-        if (autonomousSequence.size() > 0) {
-          autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
-        }
-      }
-    }
-    else {
+    SmartDashboard.putString("Current Auto Action", autonomous.toString());
+    sensorInputs.readSensors();
+    if(autonomous.execute(driveTrain, components, sensorInputs)) {
       driveTrain.mecanumDrive(0, 0, 0, driveTrain.defaultRotation2d);
     }
   }

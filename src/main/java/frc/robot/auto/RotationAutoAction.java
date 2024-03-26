@@ -5,7 +5,7 @@ import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
 
-public class RotationAutoAction extends AutoAction {
+public class RotationAutoAction implements AutoAction {
     
     //The error in degrees
     private final double targetError = 2.0;

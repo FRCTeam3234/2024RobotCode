@@ -6,7 +6,7 @@ import frc.robot.SensorInputs;
 
 //Recommended tolerance in IN is 2.0
 
-public class MoveInlineAutoAction extends AutoAction {
+public class MoveInlineAutoAction implements AutoAction {
     private AutoMove auto = new AutoMove();
 
     /*
@@ -47,6 +47,6 @@ public class MoveInlineAutoAction extends AutoAction {
 
     @Override
     public String toString() {
-        return "Auto: Move Inline";
+        return "Move Inline";
     }
 }

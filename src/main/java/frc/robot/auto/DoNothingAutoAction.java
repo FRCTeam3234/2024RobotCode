@@ -4,7 +4,7 @@ import frc.robot.Components;
 import frc.robot.DriveTrain;
 import frc.robot.SensorInputs;
 
-public class DoNothingAutoAction extends AutoAction {
+public class DoNothingAutoAction implements AutoAction {
     @Override
     public void init(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
     
@@ -19,6 +19,6 @@ public class DoNothingAutoAction extends AutoAction {
 
     @Override
     public String toString() {
-        return "Auto: Do Nothing";
+        return "Do Nothing";
     }
 }
