@@ -20,6 +20,10 @@ public class Components {
     public final CANSparkMax leftShooter = new CANSparkMax(7, MotorType.kBrushless);
     public final CANSparkMax rightShooter = new CANSparkMax(8, MotorType.kBrushless);
 
+    //AutoBypass
+    public boolean autoIntakeOut = false;
+    public boolean autoIntakeRun = false;
+
     public Components() {
         //Shooter
         leftShooter.setInverted(false);
