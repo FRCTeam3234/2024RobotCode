@@ -12,6 +12,8 @@ public class IntakeRotationController {
     private final double motionScalerConstant = 0.03;
     private boolean homed = false;
     private OptionalInt target = OptionalInt.empty();
+    private double previousRotationPower = 0.0;
+    private final double rotationPowerCurve = 0.1;
 
     //Define all intake cases here
     /*private final OptionalInt getTarget(int encoderPosition, ControlInputs controlInputs, SensorInputs sensorInputs) {
@@ -60,18 +62,27 @@ public class IntakeRotationController {
         if (target.orElse(0) < 0) target = OptionalInt.empty();
         SmartDashboard.putString("Intake Target", target.isPresent() ? target.getAsInt()+"" : "null" );
         
-        double intakePower = 0.0;
+        double rotationPower = 0.0;
         if (homed) {
             if (target.isPresent()) {
-                intakePower = rotationMath(target.getAsInt(), encoderPosition);
+                rotationPower = rotationMath(target.getAsInt(), encoderPosition);
             }
         } else {
-            intakePower = rotationHome(sensorInputs);
+            rotationPower = rotationHome(sensorInputs);
+        }
+        //if the difference between rotationPower and previousRotationPower is too great, decrease the increase of intakePower
+        if(Math.abs(rotationPower - previousRotationPower) > rotationPowerCurve){
+             if(rotationPower - previousRotationPower > 0){
+                rotationPower = previousRotationPower + rotationPowerCurve;
+             } else if(rotationPower - previousRotationPower < 0){
+                rotationPower = previousRotationPower - rotationPowerCurve;
+             }
         }
         
-        components.intakeRotation.set(intakePower);
+        previousRotationPower = rotationPower;
+        components.intakeRotation.set(rotationPower);
         SmartDashboard.putBoolean("Intake Unlocked", homed);
-        SmartDashboard.putNumber("Intake Power", intakePower);
+        SmartDashboard.putNumber("Intake Power", rotationPower);
     }
 
     private final double rotationMath(int target, int encoderPosition) {
