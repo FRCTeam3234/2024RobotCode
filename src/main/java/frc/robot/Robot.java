@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -21,9 +22,7 @@ import frc.robot.auto.RotationAutoAction;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  //Class Initiation
-  private final DriveTrain driveTrain = new DriveTrain();
+  private final SwerveDriveTrain swerveDriveTrain;
   private final ControlInputs controlInputs = new ControlInputs();
   private final SensorInputs sensorInputs = new SensorInputs();
   private Components components = new Components();
@@ -40,10 +39,13 @@ public class Robot extends TimedRobot {
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
+  public Robot() throws IOException {
+    swerveDriveTrain = new SwerveDriveTrain();
+  }
+
   @Override
   public void robotInit() {
     //Drivetrain setup
-    driveTrain.resetEncoders();
 
     //Auto Chooser
     auto_chooser.addOption(autoModeNull, autoModeNull);
