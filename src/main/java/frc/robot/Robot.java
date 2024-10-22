@@ -61,42 +61,42 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autonomousSequence = new ArrayList<AutoAction>();
-    autoSelected = auto_chooser.getSelected();
-    switch (autoSelected) {
-      case autoLeave:
-        autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
-        autonomousSequence.add(new DoNothingAutoAction());
-        break;
-      case autoTurnTest:
-        autonomousSequence.add(new RotationAutoAction(45.0));
-        autonomousSequence.add(new RotationAutoAction(-45.0));
-        autonomousSequence.add(new DoNothingAutoAction());
-        break;
-      default:
-        autonomousSequence.add(new DoNothingAutoAction());
-        break;
-    }
-    autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
+    // autonomousSequence = new ArrayList<AutoAction>();
+    // autoSelected = auto_chooser.getSelected();
+    // switch (autoSelected) {
+    //   case autoLeave:
+    //     autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
+    //     autonomousSequence.add(new DoNothingAutoAction());
+    //     break;
+    //   case autoTurnTest:
+    //     autonomousSequence.add(new RotationAutoAction(45.0));
+    //     autonomousSequence.add(new RotationAutoAction(-45.0));
+    //     autonomousSequence.add(new DoNothingAutoAction());
+    //     break;
+    //   default:
+    //     autonomousSequence.add(new DoNothingAutoAction());
+    //     break;
+    // }
+    // autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
   }
 
   @Override
   public void autonomousPeriodic() {
-    if (autonomousSequence.size() > 0) {
-      SmartDashboard.putString("Current Auto Action",
-         autonomousSequence.get(0).toString());
-      sensorInputs.readSensors();
-      if (autonomousSequence.get(0).execute(driveTrain, components, sensorInputs)) {
-        autonomousSequence.get(0).finalize(driveTrain, components, sensorInputs);
-        autonomousSequence.remove(0);
-        if (autonomousSequence.size() > 0) {
-          autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
-        }
-      }
-    }
-    else {
-      driveTrain.mecanumDrive(0, 0, 0, driveTrain.defaultRotation2d);
-    }
+    // if (autonomousSequence.size() > 0) {
+    //   SmartDashboard.putString("Current Auto Action",
+    //      autonomousSequence.get(0).toString());
+    //   sensorInputs.readSensors();
+    //   if (autonomousSequence.get(0).execute(driveTrain, components, sensorInputs)) {
+    //     autonomousSequence.get(0).finalize(driveTrain, components, sensorInputs);
+    //     autonomousSequence.remove(0);
+    //     if (autonomousSequence.size() > 0) {
+    //       autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
+    //     }
+    //   }
+    // }
+    // else {
+    //   driveTrain.mecanumDrive(0, 0, 0, driveTrain.defaultRotation2d);
+    // }
   }
 
   @Override
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
     componentsControl.runComponents(components, controlInputs, sensorInputs);
     intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
 
-    driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
+    //driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }
 
   @Override
