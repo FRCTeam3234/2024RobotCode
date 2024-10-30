@@ -29,22 +29,22 @@ public class AutoMove {
         motion = new Motion(maxTime, rotationsToTravel, toleranceInEncoderCount, scaler);
     }
 
-    public final boolean MoveExecute(DriveTrain driveTrain) {
+    // public final boolean MoveExecute(DriveTrain driveTrain) {
         
-        //Variable Defintions
-        double currentPosition = driveTrain.getFrontLeftPosition();
-        double currentTime = ((Timer.getFPGATimestamp()) - timeStarted);
-        double power = motion.getPower(currentPosition, currentTime);
+    //     //Variable Defintions
+    //     // double currentPosition = driveTrain.getFrontLeftPosition();
+    //     // double currentTime = ((Timer.getFPGATimestamp()) - timeStarted);
+    //     // double power = motion.getPower(currentPosition, currentTime);
         
-        //Smart Dashboard Output
-        SmartDashboard.putNumber("Auto Left Current Position", driveTrain.getFrontLeftPosition());
-        SmartDashboard.putNumber("Auto Right Current Position", driveTrain.getFrontRightPosition());
-        SmartDashboard.putNumber("Auto Motor Power", power);
+    //     // //Smart Dashboard Output
+    //     // SmartDashboard.putNumber("Auto Left Current Position", driveTrain.getFrontLeftPosition());
+    //     // SmartDashboard.putNumber("Auto Right Current Position", driveTrain.getFrontRightPosition());
+    //     // SmartDashboard.putNumber("Auto Motor Power", power);
 
-        //Control drivetrain
-        driveTrain.mecanumDrive(0, -power, 0, driveTrain.defaultRotation2d);
+    //     //Control drivetrain
+    //     // driveTrain.mecanumDrive(0, -power, 0, driveTrain.defaultRotation2d);
 
-        //Return true if done
-        return motion.isDone(currentPosition, currentTime);
-    }
+    //     // //Return true if done
+    //     // return motion.isDone(currentPosition, currentTime);
+    // }
 }

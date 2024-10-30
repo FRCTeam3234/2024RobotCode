@@ -79,7 +79,7 @@ public class RotationAutoAction extends AutoAction {
         if (power > 0 && Math.abs(power) < minPower) power = minPower;
         if (power < 0 && Math.abs(power) < minPower) power = -minPower;
 
-        driveTrain.mecanumDrive(0, 0, power, driveTrain.defaultRotation2d);
+        // driveTrain.mecanumDrive(0, 0, power, driveTrain.defaultRotation2d);
         SmartDashboard.putNumber("Auto Motor Power", power);
         
         //Returning

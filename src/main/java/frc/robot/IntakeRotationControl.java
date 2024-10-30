@@ -44,7 +44,7 @@ public class IntakeRotationControl {
             intakePower = rotationHome(sensorInputs);
         }
         
-        components.intakeRotation.set(intakePower);
+        // components.intakeRotation.set(intakePower);
         SmartDashboard.putBoolean("Intake Unlocked", homed);
         SmartDashboard.putNumber("Intake Power", intakePower);
     }

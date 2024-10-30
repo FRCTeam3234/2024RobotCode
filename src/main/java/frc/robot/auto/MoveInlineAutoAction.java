@@ -39,7 +39,8 @@ public class MoveInlineAutoAction extends AutoAction {
 
     @Override
     public boolean execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
-        return auto.MoveExecute(driveTrain);
+        // return auto.MoveExecute(driveTrain);
+    return true;
     }
 
     @Override

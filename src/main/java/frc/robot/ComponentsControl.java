@@ -59,11 +59,11 @@ public class ComponentsControl {
         SmartDashboard.putNumber("Left Climb Speed", climbLeftSpeed);
         SmartDashboard.putNumber("Right Climb Speed", climbRightSpeed);
 
-        components.leftLowerShooter.set(shooterSpeed);
-        components.leftUpperShooter.set(shooterSpeed);
-        components.intakeBigBar.set(intakeSpeed);
-        components.climbLeft.set(powerClamp(climbLeftSpeed));
-        components.climbRight.set(powerClamp(climbRightSpeed));
+        // components.leftLowerShooter.set(shooterSpeed);
+        // components.leftUpperShooter.set(shooterSpeed);
+        // components.intakeBigBar.set(intakeSpeed);
+        // components.climbLeft.set(powerClamp(climbLeftSpeed));
+        // components.climbRight.set(powerClamp(climbRightSpeed));
     }
 
     private double powerClamp(double power) {

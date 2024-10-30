@@ -108,6 +108,7 @@ public class Robot extends TimedRobot {
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
     intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
+    swerveDriveTrain.drive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation);
 
     //driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }
