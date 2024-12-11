@@ -3,9 +3,10 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Components;
 import frc.robot.DriveTrain;
+import frc.robot.SwerveDriveTrain;
 import frc.robot.SensorInputs;
 
-public class RotationAutoAction extends AutoAction {
+public class RotationAutoAction implements AutoAction {
     
     //The error in degrees
     private final double targetError = 2.0;
@@ -54,7 +55,7 @@ public class RotationAutoAction extends AutoAction {
     }
 
     @Override
-    public void init(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+    public void init(SwerveDriveTrain swerveDriveTrain, Components components, SensorInputs sensor) {
         startingDegree = sensor.currentYawDegrees;
         
         if (setDirection != direction.LEFT && setDirection != direction.RIGHT) {
@@ -68,7 +69,7 @@ public class RotationAutoAction extends AutoAction {
     }
 
     @Override
-    public boolean execute(DriveTrain driveTrain, Components components, SensorInputs sensor) {
+    public boolean execute(SwerveDriveTrain swerveDriveTrain, Components components, SensorInputs sensor) {
         //Values
         double degreesLeft = travelDistance(sensor.currentYawDegrees);
         SmartDashboard.putNumber("Auto Degrees Left", degreesLeft);
@@ -87,7 +88,7 @@ public class RotationAutoAction extends AutoAction {
     }
 
     @Override
-    public void finalize(DriveTrain driveTrain, Components components, SensorInputs sensor) {}
+    public void finalize(SwerveDriveTrain swerveDriveTrain, Components components, SensorInputs sensor) {}
 
     @Override
     public String toString() {

@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -34,6 +36,7 @@ public class SensorInputs {
         SmartDashboard.putNumber("NavX Pitch", currentPitchDegrees);
         SmartDashboard.putNumber("NavX Yaw", currentYawDegrees);
         SmartDashboard.putNumber("NavX Roll", currentRollDegrees);
+
     }
 
     public final float convertTo360(float input) {

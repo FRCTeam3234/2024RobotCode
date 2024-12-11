@@ -30,7 +30,8 @@ public final class Main {
       try {
         return new Robot();
       } catch (IOException e) {
-        // TODO: LOG THIS!
+        System.out.println(e.getLocalizedMessage());
+        System.out.println(e);
         return null;
       }
     });

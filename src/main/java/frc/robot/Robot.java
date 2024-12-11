@@ -7,9 +7,11 @@ package frc.robot;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.auto.AutoAction;
 import frc.robot.auto.DoNothingAutoAction;
 import frc.robot.auto.MoveInlineAutoAction;
@@ -36,6 +38,8 @@ public class Robot extends TimedRobot {
   private final String autoModeNull = "Do Nothing";
   private final String autoLeave = "Leave";
   private final String autoTurnTest = "Turn Test";
+  private final String autoBox = "Box Movement";
+  private final String moveForward = "Move Forward";
   private ArrayList<AutoAction> autonomousSequence;
   private SendableChooser<String> auto_chooser = new SendableChooser<String>();
 
@@ -52,6 +56,8 @@ public class Robot extends TimedRobot {
     auto_chooser.addOption(autoLeave, autoLeave);
     auto_chooser.addOption(autoTurnTest, autoTurnTest);
     auto_chooser.setDefaultOption(autoModeNull, autoModeNull);
+    auto_chooser.addOption(autoBox, autoBox);
+    auto_chooser.addOption(moveForward, moveForward);
 
     SmartDashboard.putData("Auto Chooser", auto_chooser);
   }
@@ -61,42 +67,61 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // autonomousSequence = new ArrayList<AutoAction>();
-    // autoSelected = auto_chooser.getSelected();
-    // switch (autoSelected) {
-    //   case autoLeave:
-    //     autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
-    //     autonomousSequence.add(new DoNothingAutoAction());
-    //     break;
-    //   case autoTurnTest:
-    //     autonomousSequence.add(new RotationAutoAction(45.0));
-    //     autonomousSequence.add(new RotationAutoAction(-45.0));
-    //     autonomousSequence.add(new DoNothingAutoAction());
-    //     break;
-    //   default:
-    //     autonomousSequence.add(new DoNothingAutoAction());
-    //     break;
-    // }
-    // autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
+    autonomousSequence = new ArrayList<AutoAction>();
+    autoSelected = auto_chooser.getSelected();
+    switch (autoSelected) {
+      case moveForward:
+        autonomousSequence.add(
+          new MoveInlineAutoAction(
+            new Pose2d(0.0,0.0,new Rotation2d(0.0)),
+            new Pose2d(1.0,0.0,new Rotation2d(0.0))));
+        autonomousSequence.add(
+          new MoveInlineAutoAction(
+            new Pose2d(1.0,0.0,new Rotation2d(0.0)),
+            new Pose2d(1.0,-1.0,new Rotation2d(0.0))));
+        autonomousSequence.add(
+          new MoveInlineAutoAction(
+            new Pose2d(1.0,-1.0,new Rotation2d(0.0)),
+            new Pose2d(0.0,-1.0,new Rotation2d(0.0))));
+                autonomousSequence.add(
+          new MoveInlineAutoAction(
+            new Pose2d(0.0,-1.0,new Rotation2d(0.0)),
+            new Pose2d(0.0,-0.0,new Rotation2d(0.0))));
+            ;
+        autonomousSequence.add(new DoNothingAutoAction());
+      // case autoLeave:
+      //   autonomousSequence.add(new MoveInlineAutoAction(5.0, 80.0, 2.0));
+      //   autonomousSequence.add(new DoNothingAutoAction());
+      //   break;
+      // case autoTurnTest:
+      //   autonomousSequence.add(new RotationAutoAction(45.0));
+      //   autonomousSequence.add(new RotationAutoAction(-45.0));
+      //   autonomousSequence.add(new DoNothingAutoAction());
+      //   break;
+       default:
+         autonomousSequence.add(new DoNothingAutoAction());
+        break;
+    }
+    autonomousSequence.get(0).init(swerveDriveTrain, components, sensorInputs);
   }
 
   @Override
   public void autonomousPeriodic() {
-    // if (autonomousSequence.size() > 0) {
-    //   SmartDashboard.putString("Current Auto Action",
-    //      autonomousSequence.get(0).toString());
-    //   sensorInputs.readSensors();
-    //   if (autonomousSequence.get(0).execute(driveTrain, components, sensorInputs)) {
-    //     autonomousSequence.get(0).finalize(driveTrain, components, sensorInputs);
-    //     autonomousSequence.remove(0);
-    //     if (autonomousSequence.size() > 0) {
-    //       autonomousSequence.get(0).init(driveTrain, components, sensorInputs);
-    //     }
-    //   }
-    // }
-    // else {
-    //   driveTrain.mecanumDrive(0, 0, 0, driveTrain.defaultRotation2d);
-    // }
+    if (autonomousSequence.size() > 0) {
+      SmartDashboard.putString("Current Auto Action",
+         autonomousSequence.get(0).toString());
+      sensorInputs.readSensors();
+      if (autonomousSequence.get(0).execute(swerveDriveTrain, components, sensorInputs)) {
+        autonomousSequence.get(0).finalize(swerveDriveTrain, components, sensorInputs);
+        autonomousSequence.remove(0);
+        if (autonomousSequence.size() > 0) {
+          autonomousSequence.get(0).init(swerveDriveTrain, components, sensorInputs);
+        }
+      }
+    }
+    else {
+      swerveDriveTrain.drive(0.0, 0.0, 0.0);
+    }
   }
 
   @Override
@@ -108,8 +133,8 @@ public class Robot extends TimedRobot {
     sensorInputs.readSensors();
     componentsControl.runComponents(components, controlInputs, sensorInputs);
     intakeRotationControl.runRotation(components, controlInputs, sensorInputs);
-    swerveDriveTrain.drive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation);
-
+    swerveDriveTrain.drive(-controlInputs.driveStickY, -controlInputs.driveStickX, -controlInputs.driveStickZrotation);
+    
     //driveTrain.mecanumDrive(controlInputs.driveStickX, controlInputs.driveStickY, controlInputs.driveStickZrotation, sensorInputs.drivetrainRotation);
   }
 
